@@ -1,86 +1,16 @@
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4148F3B6-39B8-42BA-B79B-A0B47B623CB9}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Penguin.WinForms</RootNamespace>
-    <AssemblyName>Penguin.WinForms</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Penguin.Json" Version="1.0.1-T9UER66" />
+    <PackageReference Include="Penguin.Reflection" Version="4.0.9-T9RVMZA" />
+    <PackageReference Include="Penguin.Reflection.Extensions" Version="3.0.5-T9UEEAT" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Components\Dependencies\CancelListBoxExItemDragEventArgs.cs" />
-    <Compile Include="Components\Dependencies\ListBoxExItemDragEventArgs.cs" />
-    <Compile Include="Components\Enumerations\InsertionMode.cs" />
-    <Compile Include="Components\ListBoxEx.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Components\ListViewEx.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Dialogs\ExceptionDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editors\ComponentFactory.cs" />
-    <Compile Include="Editors\Component\SelectForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editors\Component\SelectTypeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editors\ConstructorArguments\DropDownRowConstructorArguments.cs" />
-    <Compile Include="Editors\ConstructorArguments\Interfaces\IDropDownConstructorArguments.cs" />
-    <Compile Include="Editors\ConstructorArguments\Interfaces\IDropDownRowConstructorArguments.cs" />
-    <Compile Include="Editors\ConstructorArguments\Interfaces\IItemConstructorArguments.cs" />
-    <Compile Include="Editors\ConstructorArguments\Interfaces\ILabelConstructorArguments.cs" />
-    <Compile Include="Editors\ConstructorArguments\Interfaces\ITextBoxConstructorArguments.cs" />
-    <Compile Include="Editors\ConstructorArguments\Interfaces\ITextBoxRowConstructorArguments.cs" />
-    <Compile Include="Editors\ConstructorArguments\LabelConstructorArguments.cs" />
-    <Compile Include="Editors\ConstructorArguments\TextBoxRowConstructorArguments.cs" />
-    <Compile Include="Editors\ConstructorArguments\TextBoxConstructorArguments.cs" />
-    <Compile Include="Editors\EditorCache.cs" />
-    <Compile Include="Editors\ObjectEditor.cs" />
-    <Compile Include="Editors\Events\ValueChangedEventArgs.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Editors\Component\SelectForm.resx">
-      <DependentUpon>SelectForm.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

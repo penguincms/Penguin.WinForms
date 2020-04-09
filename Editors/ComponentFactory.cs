@@ -10,6 +10,8 @@ namespace Penguin.WinForms.Editors
 {
     internal class ComponentFactory : IDisposable
     {
+        private const bool REUSE_COMPONENTS = false;
+
         private object bwLock = new object();
         private static ConcurrentDictionary<Type, ConcurrentQueue<Control>> CachedComponents = new ConcurrentDictionary<Type, ConcurrentQueue<Control>>();
         private Panel Container;
@@ -59,7 +61,7 @@ namespace Penguin.WinForms.Editors
         {
             ConcurrentQueue<Control> controls = this.GetQueue(typeof(T));
 
-            if (!controls.TryDequeue(out Control result))
+            if (!controls.TryDequeue(out Control result) || !REUSE_COMPONENTS)
             {
                 result = Activator.CreateInstance<T>();
                 this.Container.Controls.Add(result);
@@ -74,6 +76,11 @@ namespace Penguin.WinForms.Editors
 
         internal void Return<T>(T control) where T : Control
         {
+            if(!REUSE_COMPONENTS)
+            {
+                return;
+            }
+
             control.Hide();
 
             if (this.MultiThread)
@@ -222,9 +229,15 @@ namespace Penguin.WinForms.Editors
 
         internal virtual void ParentDisposed()
         {
-            foreach (Control c in this.ActiveControls)
+            if (REUSE_COMPONENTS)
             {
-                this.Return(c);
+                foreach (Control c in this.ActiveControls)
+                {
+                    this.Return(c);
+                }
+            } else
+            {
+                this.Container.Controls.Clear();
             }
         }
 

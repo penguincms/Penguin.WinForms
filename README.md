@@ -1,2 +1,0 @@
-# Penguin.WinForms
-Penguin.WinForms
