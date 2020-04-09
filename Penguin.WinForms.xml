@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Penguin.WinForms</name>
+    </assembly>
+    <members>
+        <member name="M:Penguin.WinForms.Components.Dependencies.CancelListBoxExItemDragEventArgs.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="!:CancelListBoxItemDragEventArgs"/> class.
+            </summary>
+            <param name="dragIndex">The index of the item the event data relates to.</param>
+        </member>
+        <member name="M:Penguin.WinForms.Components.Dependencies.CancelListBoxExItemDragEventArgs.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="!:CancelListBoxItemDragEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:Penguin.WinForms.Components.Dependencies.CancelListBoxExItemDragEventArgs.DragIndex">
+            <summary>
+            Gets the index of the item that is the source of the drag operation.
+            </summary>
+            <value>The index of the item that initiated the drag operation.</value>
+        </member>
+        <member name="M:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.#ctor(System.Int32,System.Int32,Penguin.WinForms.Components.Enumerations.InsertionMode,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="!:ListBoxItemDragEventArgs"/> class.
+            </summary>
+            <param name="dragIndex">The index of the item that initiated the drag operation.</param>
+            <param name="insertionIndex">The index of the the <see cref="!:ListBoxItem"/> that is the target of the drag operation.</param>
+            <param name="insertionMode">The relation of the <see cref="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex"/>.</param>
+            <param name="x">The x-coordinate of a mouse click, in pixels.</param>
+            <param name="y">The y-coordinate of a mouse click, in pixels.</param>
+        </member>
+        <member name="M:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="!:ListBoxItemDragEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex">
+            <summary>
+            Gets the insertion index of the drag operation.
+            </summary>
+            <value>The index of the the item that is the target of the drag operation.</value>
+        </member>
+        <member name="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionMode">
+            <summary>
+            Gets the relation of the <see cref="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex"/>
+            </summary>
+            <value>The relation of the <see cref="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex"/>.</value>
+        </member>
+        <member name="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.X">
+            <summary>
+            Gets the x-coordinate of the mouse during the generating event.
+            </summary>
+            <value>The x-coordinate of the mouse, in pixels.</value>
+        </member>
+        <member name="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.Y">
+            <summary>
+            Gets the y-coordinate of the mouse during the generating event.
+            </summary>
+            <value>The y-coordinate of the mouse, in pixels.</value>
+        </member>
+        <member name="T:Penguin.WinForms.Components.Enumerations.InsertionMode">
+            <summary>
+            Determines the insertion mode of a drag operation
+            </summary>
+        </member>
+        <member name="F:Penguin.WinForms.Components.Enumerations.InsertionMode.None">
+            <summary>
+            None
+            </summary>
+        </member>
+        <member name="F:Penguin.WinForms.Components.Enumerations.InsertionMode.Before">
+            <summary>
+            The source item will be inserted before the destination item
+            </summary>
+        </member>
+        <member name="F:Penguin.WinForms.Components.Enumerations.InsertionMode.After">
+            <summary>
+            The source item will be inserted after the destination item
+            </summary>
+        </member>
+        <member name="E:Penguin.WinForms.Components.ListBoxEx.AllowItemDragChanged">
+            <summary>
+            Occurs when the AllowItemDrag property value changes.
+            </summary>
+        </member>
+        <member name="E:Penguin.WinForms.Components.ListBoxEx.InsertionLineColorChanged">
+            <summary>
+            Occurs when the InsertionLineColor property value changes.
+            </summary>
+        </member>
+        <member name="E:Penguin.WinForms.Components.ListBoxEx.ItemDrag">
+            <summary>
+            Occurs when the user begins dragging an item.
+            </summary>
+        </member>
+        <member name="E:Penguin.WinForms.Components.ListBoxEx.ItemDragging">
+            <summary>
+            Occurs when a drag-and-drop operation for an item is completed.
+            </summary>
+        </member>
+        <member name="M:Penguin.WinForms.Components.ListBoxEx.OnDragDrop(System.Windows.Forms.DragEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.DragDrop"/> event.
+            </summary>
+            <param name="drgevent">A <see cref="T:System.Windows.Forms.DragEventArgs"/> that contains the event data. </param>
+        </member>
+        <member name="M:Penguin.WinForms.Components.ListBoxEx.OnMouseDown(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseDown"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data. </param>
+        </member>
+        <member name="M:Penguin.WinForms.Components.ListBoxEx.OnMouseMove(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseMove"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data. </param>
+        </member>
+        <member name="M:Penguin.WinForms.Components.ListBoxEx.WndProc(System.Windows.Forms.Message@)">
+            <summary>
+            Overrides <see cref="M:System.Windows.Forms.Control.WndProc(System.Windows.Forms.Message@)" />.
+            </summary>
+            <param name="m">The Windows <see cref="T:System.Windows.Forms.Message" /> to process.</param>
+        </member>
+        <member name="P:Penguin.WinForms.Components.ListBoxEx.InsertionLineColor">
+            <summary>
+            Gets or sets the color of the insertion line drawn when dragging items within the control.
+            </summary>
+            <value>The color of the insertion line.</value>
+        </member>
+        <member name="M:Penguin.WinForms.Components.ListBoxEx.Invalidate(System.Int32)">
+            <summary>
+            Invalidates the specified item, including the adjacent item depending on the current <see cref="P:Penguin.WinForms.Components.ListBoxEx.InsertionMode"/>.
+            </summary>
+            <param name="index">The index of the item to invalidate.</param>
+        </member>
+        <member name="M:Penguin.WinForms.Components.ListBoxEx.OnAllowItemDragChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:Penguin.WinForms.Components.ListBoxEx.AllowItemDragChanged" /> event.
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="M:Penguin.WinForms.Components.ListBoxEx.OnInsertionLineColorChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:Penguin.WinForms.Components.ListBoxEx.InsertionLineColorChanged" /> event.
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="M:Penguin.WinForms.Components.ListBoxEx.OnItemDrag(Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs)">
+            <summary>
+            Raises the <see cref="E:Penguin.WinForms.Components.ListBoxEx.ItemDrag" /> event.
+            </summary>
+            <param name="e">The <see cref="T:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="M:Penguin.WinForms.Components.ListBoxEx.OnItemDragging(Penguin.WinForms.Components.Dependencies.CancelListBoxExItemDragEventArgs)">
+            <summary>
+            Raises the <see cref="E:Penguin.WinForms.Components.ListBoxEx.ItemDragging" /> event.
+            </summary>
+            <param name="e">The <see cref="!:CancelListBoxItemDragEventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="T:Penguin.WinForms.Components.ListViewEx">
+            <summary>
+            A ListView with DragDrop reordering.
+            <see cref="!:http://support.microsoft.com/kb/822483/en-us"/>
+            </summary>
+        </member>
+    </members>
+</doc>
