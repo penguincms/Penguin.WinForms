@@ -19,9 +19,9 @@ namespace Penguin.WinForms.Editors
     public class ObjectEditor<T> : IDisposable
     {
         public string EditorId { get; set; }
-        public int ITEM_HEIGHT = 25;
+        public int ITEM_HEIGHT = 35;
         public int ITEM_SPACING = 3;
-        public int LIST_PADDING = 15;
+        public int LIST_PADDING = 25;
         public float WIDTH_PADDING_PER = .05f;
 
         private int _currentTop = 0;
@@ -79,7 +79,33 @@ namespace Penguin.WinForms.Editors
 
             Load();
         }
+        public int AddBoolItem(IBoolRowConstructorArguments arguments)
+        {
 
+            AddLabel(arguments);
+
+            CheckBox value = EditorCache.ComponentFactory.Request<CheckBox>();
+
+            value.Height = ITEM_HEIGHT;
+            value.Top = CurrentTop;
+            value.Left = (EditorCache.Container.Width / 2);
+            value.Width = (EditorCache.Container.Width / 2) - PanelPadding;
+            value.Name = arguments.Name;
+            value.Checked = arguments.Value;
+
+            value.CheckedChanged += (sender, e) =>
+            {
+                CheckBox sText = (sender as CheckBox);
+
+                arguments.OnChange?.Invoke(new ValueChangedEventArgs()
+                {
+                    SourceControl = sText,
+                    Value = sText.Checked.ToString()
+                });
+            };
+
+            return value.Height;
+        }
         public int AddDropDownItem(IDropDownRowConstructorArguments arguments)
         {
             if (arguments.ReadOnly)
@@ -102,7 +128,7 @@ namespace Penguin.WinForms.Editors
 
             value.SelectedIndex = value.Items.IndexOf(arguments.Value);
 
-            value.TextChanged += (sender, e) =>
+            value.SelectedIndexChanged += (sender, e) =>
             {
                 ComboBox sText = (sender as ComboBox);
 
@@ -268,12 +294,6 @@ namespace Penguin.WinForms.Editors
 
             CurrentTop = 0;
 
-            AddLabel(new LabelConstructorArguments(this.TemporaryObject.GetType().Name));
-
-            this.CurrentTop += ITEM_HEIGHT;
-
-            RenderProperties(TemporaryObject, TemporaryObject.GetType(), 0);
-
             Button saveButton = EditorCache.ComponentFactory.Request<Button>();
 
             saveButton.Text = "Save";
@@ -281,7 +301,7 @@ namespace Penguin.WinForms.Editors
             saveButton.Left = PanelPadding;
 
             saveButton.Height = 35;
-            saveButton.Width = 45;
+            saveButton.Width = 85;
 
             saveButton.Click += (sender, e) =>
             {
@@ -289,6 +309,14 @@ namespace Penguin.WinForms.Editors
             };
 
             CurrentTop += saveButton.Height + ITEM_SPACING;
+
+
+            AddLabel(new LabelConstructorArguments(this.TemporaryObject.GetType().Name));
+
+            this.CurrentTop += ITEM_HEIGHT;
+
+            RenderProperties(TemporaryObject, TemporaryObject.GetType(), 0);
+
         }
 
         public object Render(object value, Type objectType, string Name, int left, Action<ValueChangedEventArgs> onChange, bool readOnly = false)
@@ -313,7 +341,24 @@ namespace Penguin.WinForms.Editors
 
             string toolTipText = GetToolTipText(objectType);
 
-            if (objectType.IsEnum)
+            if(objectType == typeof(bool))
+            {
+
+                BoolRowConstructorArguments boolConstructorArguments = new BoolRowConstructorArguments()
+                {
+                    Name = Name,
+                    Value = (bool)value,
+                    ReadOnly = readOnly,
+                    OnChange = onChange,
+                    LeftOffset = left,
+                    ToolTip = toolTipText
+                };
+
+                AddBoolItem(boolConstructorArguments);
+
+                CurrentTop += ITEM_HEIGHT + ITEM_SPACING;
+            }
+            else if (objectType.IsEnum)
             {
                 List<string> values = new List<string>();
 
@@ -329,7 +374,8 @@ namespace Penguin.WinForms.Editors
                     Values = values,
                     OnChange = onChange,
                     ToolTip = toolTipText,
-                    Value = value?.ToString()
+                    Value = value?.ToString(),
+                    ReadOnly = readOnly
                 };
 
                 AddDropDownItem(arguments);
@@ -354,13 +400,13 @@ namespace Penguin.WinForms.Editors
                 addButton.Text = "Add";
                 addButton.Top = CurrentTop;
                 addButton.Left = optionLeft;
-                addButton.Height = 20;
-                addButton.Width = 45;
+                addButton.Height = 35;
+                addButton.Width = 85;
 
                 addButton.Click += (sender, e) =>
                 {
                     object toAdd = null;
-
+                    
                     if (collectionType == typeof(string))
                     {
                         toAdd = string.Empty;

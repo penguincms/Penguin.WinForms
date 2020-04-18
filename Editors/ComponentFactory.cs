@@ -23,9 +23,16 @@ namespace Penguin.WinForms.Editors
 
         public void Clear()
         {
-            foreach (Control c in this.ActiveControls)
+            if (!REUSE_COMPONENTS)
             {
-                this.Return(c);
+                Container.Controls.Clear();
+            }
+            else
+            {
+                foreach (Control c in this.ActiveControls)
+                {
+                    this.Return(c);
+                }
             }
         }
 
@@ -78,6 +85,7 @@ namespace Penguin.WinForms.Editors
         {
             if(!REUSE_COMPONENTS)
             {
+                this.Container.Controls.Remove(control);
                 return;
             }
 

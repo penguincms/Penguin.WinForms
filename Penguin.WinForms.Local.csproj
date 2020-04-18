@@ -13,17 +13,14 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
-    <PackageReference Include="Penguin.Reflection" Version="4.0.9-T9UPDS1" />
-    <PackageReference Include="Penguin.Reflection.Extensions" Version="3.0.5-T9UPDS1" />
-    <PackageReference Include="Penguin.Json" Version="1.0.1-T9UR2K9" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Editors\Component\PromptBool.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Editors\Component\InputText.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <ProjectReference Include="..\Penguin.Debugging\Penguin.Debugging.Local.csproj" />
+    <ProjectReference Include="..\Penguin.Extensions.Exceptions\Penguin.Extensions.Exceptions.Local.csproj" />
+    <ProjectReference Include="..\Penguin.Extensions.String\Penguin.Extensions.String.Local.csproj" />
+    <ProjectReference Include="..\Penguin.Json\Penguin.Json.Local.csproj" />
+    <ProjectReference Include="..\Penguin.Reflection\Penguin.Reflection.Local.csproj" />
+    <ProjectReference Include="..\Penguin.Reflection.Abstractions\Penguin.Reflection.Abstractions.Local.csproj" />
+    <ProjectReference Include="..\Penguin.Reflection.Extensions\Penguin.Reflection.Extensions.Local.csproj" />
+    <ProjectReference Include="..\Penguin.SystemExtensions.Abstractions\Penguin.SystemExtensions.Abstractions.Local.csproj" />
   </ItemGroup>
   <Import Project="Penguin.Projects.Shared\Penguin.Projects.Shared.csproj" />
 </Project>
