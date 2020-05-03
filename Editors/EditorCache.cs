@@ -11,7 +11,7 @@ namespace Penguin.WinForms.Editors
     internal class EditorCache : IDisposable
     {
         private static ConcurrentDictionary<string, CachedEditor> editorCache = new ConcurrentDictionary<string, CachedEditor>();
-
+        private Panel ParentContainer;
         internal EditorCache(string Id, Panel container, bool multiThread = true)
         {
             if (!editorCache.TryGetValue(Id, out CachedEditor _cachedEditor))
@@ -22,7 +22,6 @@ namespace Penguin.WinForms.Editors
                 ComponentFactory = new ComponentFactory(Container, multiThread);
 
                 container.HorizontalScroll.Maximum = 0;
-                container.AutoScroll = false;
                 container.VerticalScroll.Visible = false;
                 container.AutoScroll = true;
                 Container.Width = container.Width;
@@ -61,19 +60,28 @@ namespace Penguin.WinForms.Editors
                 ComponentFactory = cachedEditor.ComponentFactory;
             }
 
+            ParentContainer = container;
             container.Controls.Add(Container);
         }
 
-        internal Panel Container { get; set; }
-        internal ComponentFactory ComponentFactory { get; set; }
+        public Panel Container { get; private set; }
+        private ComponentFactory ComponentFactory { get; set; }
 
         private CachedEditor cachedEditor { get; set; }
+        public IEnumerable<Control> ActiveControls => ComponentFactory.ActiveControls;
 
         private class CachedEditor
         {
             internal Panel Container { get; set; }
             internal ComponentFactory ComponentFactory { get; set; }
             internal bool IsDisposed { get; set; }
+        }
+
+        internal T Request<T>() where T : Control
+        {
+            T c = ComponentFactory.Request<T>();
+
+            return c;
         }
 
         #region IDisposable Support
@@ -110,6 +118,13 @@ namespace Penguin.WinForms.Editors
             Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
+        }
+
+        internal void Clear()
+        {
+            ParentContainer.VerticalScroll.Value = 0;
+            Container.Top = 0;
+            ComponentFactory.Clear();
         }
         #endregion
     }

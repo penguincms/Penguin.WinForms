@@ -17,6 +17,7 @@ namespace Penguin.WinForms.Components
 
         private const int INVALID_INDEX = -1;
         private const int WM_PAINT = 0xF;
+        private const int WM_VSCROLL = 0x115;
 
         #endregion Constants
 
@@ -65,10 +66,20 @@ namespace Penguin.WinForms.Components
         [Category("Drag Drop")]
         public event EventHandler<CancelListBoxExItemDragEventArgs> ItemDragging;
 
+        public event ScrollEventHandler Scroll;
+
+
         #endregion Events
 
         #region Overridden Methods
-
+        protected virtual void OnScroll(ScrollEventArgs e)
+        {
+            ScrollEventHandler handler = this.Scroll;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
         /// <summary>
         /// Raises the <see cref="E:System.Windows.Forms.Control.DragDrop"/> event.
         /// </summary>
@@ -247,6 +258,10 @@ namespace Penguin.WinForms.Components
                 case WM_PAINT:
                     this.OnWmPaint(ref m);
                     break;
+                case WM_VSCROLL:
+                    OnScroll(new ScrollEventArgs((ScrollEventType)(m.WParam.ToInt32() & 0xffff), 0));
+                    break;
+
             }
         }
 

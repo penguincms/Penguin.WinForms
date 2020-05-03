@@ -4,7 +4,9 @@ using Penguin.Reflection.Extensions;
 using Penguin.WinForms.Editors.Component;
 using Penguin.WinForms.Editors.ConstructorArguments;
 using Penguin.WinForms.Editors.ConstructorArguments.Interfaces;
+using Penguin.WinForms.Editors.Dependencies;
 using Penguin.WinForms.Editors.Events;
+using Penguin.WinForms.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -67,9 +69,22 @@ namespace Penguin.WinForms.Editors
 
         public ObjectEditor(string editorId, T toEdit, Panel container, Action<T> onSave, bool multiThread = true)
         {
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
             EditorId = editorId;
 
             EditorCache = new EditorCache(editorId, container, multiThread);
+
+            EditorCache.Container.Resize += (o, s) =>
+            {
+                foreach(Action a in ResizeActions)
+                {
+                    a.Invoke();
+                }
+            };
 
             TemporaryObject = toEdit.JsonClone();
 
@@ -81,17 +96,29 @@ namespace Penguin.WinForms.Editors
         }
         public int AddBoolItem(IBoolRowConstructorArguments arguments)
         {
+            if (arguments is null)
+            {
+                throw new ArgumentNullException(nameof(arguments));
+            }
 
             AddLabel(arguments);
 
-            CheckBox value = EditorCache.ComponentFactory.Request<CheckBox>();
+            CheckBox value = EditorCache.Request<CheckBox>();
+
+            Action resize = new Action(() =>
+            {
+                value.Left = (EditorCache.Container.Width / 2);
+                value.Width = (EditorCache.Container.Width / 2) - PanelPadding;
+            });
 
             value.Height = ITEM_HEIGHT;
             value.Top = CurrentTop;
-            value.Left = (EditorCache.Container.Width / 2);
-            value.Width = (EditorCache.Container.Width / 2) - PanelPadding;
             value.Name = arguments.Name;
             value.Checked = arguments.Value;
+
+            resize.Invoke();
+
+            ResizeActions.Add(resize);
 
             value.CheckedChanged += (sender, e) =>
             {
@@ -115,14 +142,20 @@ namespace Penguin.WinForms.Editors
 
             AddLabel(arguments);
 
-            ComboBox value = EditorCache.ComponentFactory.Request<ComboBox>();
+            ComboBox value = EditorCache.Request<ComboBox>();
+
+            Action resize = new Action(() => {
+                value.Left = (EditorCache.Container.Width / 2);
+                value.Width = (EditorCache.Container.Width / 2) - PanelPadding;
+            });
 
             value.Height = ITEM_HEIGHT;
             value.Top = CurrentTop;
-            value.Left = (EditorCache.Container.Width / 2);
-            value.Width = (EditorCache.Container.Width / 2) - PanelPadding;
             value.Name = arguments.Name;
             value.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            resize.Invoke();
+            ResizeActions.Add(resize);
 
             value.Items.AddRange(arguments.Values.ToArray());
 
@@ -151,14 +184,21 @@ namespace Penguin.WinForms.Editors
 
             int realLeft = PanelPadding + arguments.LeftOffset;
 
-            Label label = EditorCache.ComponentFactory.Request<Label>();
+            Label label = EditorCache.Request<Label>();
 
             label.Height = ITEM_HEIGHT;
             label.Top = CurrentTop;
             label.Left = realLeft;
-            label.Text = arguments.Name;
-            label.Width = (EditorCache.Container.Width / 2) - realLeft;
+            label.Text = arguments.Name;           
             label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
+            Action resize = new Action(() =>
+            {
+                label.Width = (EditorCache.Container.Width / 2) - realLeft;
+            });
+
+            resize.Invoke();
+            ResizeActions.Add(resize);
 
             if (!string.IsNullOrWhiteSpace(arguments.ToolTip))
             {
@@ -177,15 +217,21 @@ namespace Penguin.WinForms.Editors
         {
             AddLabel(arguments);
 
-            TextBox value = EditorCache.ComponentFactory.Request<TextBox>();
+            TextBox value = EditorCache.Request<TextBox>();
 
             value.Height = ITEM_HEIGHT * (arguments.Value ?? string.Empty).Count(c => c == '\n');
             value.Top = CurrentTop;
-            value.Left = (EditorCache.Container.Width / 2);
-            value.Width = (EditorCache.Container.Width / 2) - PanelPadding;
             value.Name = arguments.Name;
             value.Text = (arguments.Value ?? string.Empty);
-            value.Multiline = (arguments.Value ?? string.Empty).Contains(System.Environment.NewLine);
+            value.Multiline = (arguments.Value ?? string.Empty).Contains(System.Environment.NewLine, StringComparison.OrdinalIgnoreCase);
+
+            Action resize = new Action(() =>
+            {
+                value.Left = (EditorCache.Container.Width / 2);
+                value.Width = (EditorCache.Container.Width / 2) - PanelPadding;
+            });
+            resize.Invoke();
+            ResizeActions.Add(resize);
 
             if (arguments.ReadOnly)
             {
@@ -207,7 +253,7 @@ namespace Penguin.WinForms.Editors
                 {
                     sizeChange += value.ClientSize.Height;
 
-                    foreach (Control c in EditorCache.ComponentFactory.ActiveControls)
+                    foreach (Control c in EditorCache.ActiveControls)
                     {
                         if (c.Top > value.Top)
                         {
@@ -287,14 +333,21 @@ namespace Penguin.WinForms.Editors
             }
             return toReturn;
         }
+        private List<Action> ResizeActions = new List<Action>();
 
         public void Load()
         {
-            EditorCache.ComponentFactory.Clear();
+            EditorCache.Container.SuspendDrawing();
 
+            EditorCache.Clear();
+            
             CurrentTop = 0;
 
-            Button saveButton = EditorCache.ComponentFactory.Request<Button>();
+            Button saveButton = EditorCache.Request<Button>();
+
+            //FixMe
+            saveButton.Parent.Top = 0;
+            
 
             saveButton.Text = "Save";
             saveButton.Top = CurrentTop;
@@ -317,6 +370,7 @@ namespace Penguin.WinForms.Editors
 
             RenderProperties(TemporaryObject, TemporaryObject.GetType(), 0);
 
+            EditorCache.Container.ResumeDrawing();
         }
 
         public object Render(object value, Type objectType, string Name, int left, Action<ValueChangedEventArgs> onChange, bool readOnly = false)
@@ -393,15 +447,23 @@ namespace Penguin.WinForms.Editors
                     ToolTip = toolTipText
                 });
 
-                int optionLeft = (EditorCache.Container.Width / 2);
 
-                Button addButton = EditorCache.ComponentFactory.Request<Button>();
+
+                Button addButton = EditorCache.Request<Button>();
 
                 addButton.Text = "Add";
                 addButton.Top = CurrentTop;
-                addButton.Left = optionLeft;
                 addButton.Height = 35;
                 addButton.Width = 85;
+
+                Action resize = new Action(() =>
+                {
+
+                    addButton.Left = (EditorCache.Container.Width / 2);
+                });
+
+                resize.Invoke();
+                ResizeActions.Add(resize);
 
                 addButton.Click += (sender, e) =>
                 {
@@ -456,7 +518,7 @@ namespace Penguin.WinForms.Editors
                 {
                     int thisIndex = index;
 
-                    Button removeButton = EditorCache.ComponentFactory.Request<Button>();
+                    Button removeButton = EditorCache.Request<Button>();
 
                     removeButton.Text = "-";
 
@@ -510,10 +572,16 @@ namespace Penguin.WinForms.Editors
 
                 if (value is null)
                 {
-                    value = Activator.CreateInstance(objectType);
+                    if (!objectType.IsAbstract)
+                    {
+                        value = Activator.CreateInstance(objectType);
+                    }
                 }
 
-                RenderProperties(value, objectType, left + LIST_PADDING);
+                if (!(value is null))
+                {
+                    RenderProperties(value, objectType, left + LIST_PADDING);
+                }
             }
 
             return value;
@@ -521,6 +589,11 @@ namespace Penguin.WinForms.Editors
 
         public void RenderProperties(object item, Type objectType, int left)
         {
+            if (objectType is null)
+            {
+                throw new ArgumentNullException(nameof(objectType));
+            }
+
             IEnumerable<PropertyInfo> properties = objectType.GetProperties().OrderBy(pi => pi.GetCustomAttribute<DisplayAttribute>()?.Order ?? 0);
             foreach (PropertyInfo pi in properties)
             {
@@ -543,11 +616,38 @@ namespace Penguin.WinForms.Editors
                     };
                 }
 
-                object renderableObject = Render(pi.GetValue(item), pi.PropertyType, pi.Name, left, onPropertyChange, readOnly);
-
-                if (!readOnly)
+                void RenderException(Exception ex)
                 {
-                    pi.SetValue(item, renderableObject);
+                    RenderExceptionWrapper renderException = new RenderExceptionWrapper(ex);
+
+                    Render(renderException, typeof(RenderExceptionWrapper), pi.Name, left, (v) => { }, true);
+                }
+
+                try {
+
+                    if (typeof(Exception).IsAssignableFrom(pi.PropertyType))
+                    {
+                        Exception ex = pi.GetValue(item) as Exception;
+
+                        if (ex != null)
+                        {
+                            RenderException(ex);
+                        }
+                    }
+                    else
+                    {
+                        object renderableObject = Render(pi.GetValue(item), pi.PropertyType, pi.Name, left, onPropertyChange, readOnly);
+
+                        if (!readOnly)
+                        {
+                            pi.SetValue(item, renderableObject);
+                        }
+                    }
+
+                } catch(Exception ex)
+                {
+
+                    RenderException(ex);
                 }
             }
         }
