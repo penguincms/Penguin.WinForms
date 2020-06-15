@@ -74,11 +74,7 @@ namespace Penguin.WinForms.Components
         #region Overridden Methods
         protected virtual void OnScroll(ScrollEventArgs e)
         {
-            ScrollEventHandler handler = this.Scroll;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            this.Scroll?.Invoke(this, e);
         }
         /// <summary>
         /// Raises the <see cref="E:System.Windows.Forms.Control.DragDrop"/> event.
@@ -86,6 +82,11 @@ namespace Penguin.WinForms.Components
         /// <param name="drgevent">A <see cref="T:System.Windows.Forms.DragEventArgs"/> that contains the event data. </param>
         protected override void OnDragDrop(DragEventArgs drgevent)
         {
+            if (drgevent is null)
+            {
+                throw new ArgumentNullException(nameof(drgevent));
+            }
+
             if (this.IsDragging)
             {
                 try
@@ -155,6 +156,11 @@ namespace Penguin.WinForms.Components
 
         protected override void OnDragOver(DragEventArgs drgevent)
         {
+            if (drgevent is null)
+            {
+                throw new ArgumentNullException(nameof(drgevent));
+            }
+
             if (this.IsDragging)
             {
                 int insertionIndex;
@@ -199,6 +205,11 @@ namespace Penguin.WinForms.Components
         /// <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data. </param>
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            if (e is null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             base.OnMouseDown(e);
 
             if (e.Button == MouseButtons.Left)
@@ -219,6 +230,11 @@ namespace Penguin.WinForms.Components
         /// <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data. </param>
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            if (e is null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (this.AllowItemDrag && !this.IsDragging && e.Button == MouseButtons.Left && this.IsOutsideDragZone(e.Location) && this.DragIndex != INVALID_INDEX)
             {
                 CancelListBoxExItemDragEventArgs args;
@@ -458,11 +474,9 @@ namespace Penguin.WinForms.Components
                     g.DrawLine(pen, x1, y, x2 - 1, y);
                 }
 
-                using (Brush brush = new SolidBrush(this.InsertionLineColor))
-                {
-                    g.FillPolygon(brush, leftArrowHead);
-                    g.FillPolygon(brush, rightArrowHead);
-                }
+                using Brush brush = new SolidBrush(this.InsertionLineColor);
+                g.FillPolygon(brush, leftArrowHead);
+                g.FillPolygon(brush, rightArrowHead);
             }
         }
 
