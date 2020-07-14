@@ -5,6 +5,13 @@ using System.Linq;
 
 namespace Penguin.WinForms.Editors.Component
 {
+    public enum SelectTypeDisplayStyle
+    {
+        Name,
+        FullName,
+        ToString
+    }
+
     public class SelectTypeForm : SelectForm<Type>
     {
         public SelectTypeForm(Type baseType, SelectTypeDisplayStyle style = SelectTypeDisplayStyle.Name, Action<Type> onSelect = null) : base(GetOptions(baseType), "Please Select A Type", onSelect, GetDisplayFunc(style))
@@ -13,6 +20,11 @@ namespace Penguin.WinForms.Editors.Component
 
         public static List<Type> GetOptions(Type baseType)
         {
+            if (baseType is null)
+            {
+                throw new ArgumentNullException(nameof(baseType));
+            }
+
             List<Type> TypeOptions = new List<Type>()
                 {
                     baseType
@@ -47,12 +59,5 @@ namespace Penguin.WinForms.Editors.Component
                     throw new ArgumentException($"Unhandled type display style {style}", "style");
             }
         }
-    }
-
-    public enum SelectTypeDisplayStyle
-    {
-        Name,
-        FullName,
-        ToString
     }
 }

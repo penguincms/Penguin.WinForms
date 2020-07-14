@@ -68,24 +68,21 @@ namespace Penguin.WinForms.Components
 
         public event ScrollEventHandler Scroll;
 
-
         #endregion Events
 
         #region Overridden Methods
-        protected virtual void OnScroll(ScrollEventArgs e)
-        {
-            ScrollEventHandler handler = this.Scroll;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
+
         /// <summary>
         /// Raises the <see cref="E:System.Windows.Forms.Control.DragDrop"/> event.
         /// </summary>
         /// <param name="drgevent">A <see cref="T:System.Windows.Forms.DragEventArgs"/> that contains the event data. </param>
         protected override void OnDragDrop(DragEventArgs drgevent)
         {
+            if (drgevent is null)
+            {
+                throw new ArgumentNullException(nameof(drgevent));
+            }
+
             if (this.IsDragging)
             {
                 try
@@ -155,6 +152,11 @@ namespace Penguin.WinForms.Components
 
         protected override void OnDragOver(DragEventArgs drgevent)
         {
+            if (drgevent is null)
+            {
+                throw new ArgumentNullException(nameof(drgevent));
+            }
+
             if (this.IsDragging)
             {
                 int insertionIndex;
@@ -199,6 +201,11 @@ namespace Penguin.WinForms.Components
         /// <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data. </param>
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            if (e is null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             base.OnMouseDown(e);
 
             if (e.Button == MouseButtons.Left)
@@ -219,6 +226,11 @@ namespace Penguin.WinForms.Components
         /// <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data. </param>
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            if (e is null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (this.AllowItemDrag && !this.IsDragging && e.Button == MouseButtons.Left && this.IsOutsideDragZone(e.Location) && this.DragIndex != INVALID_INDEX)
             {
                 CancelListBoxExItemDragEventArgs args;
@@ -244,6 +256,15 @@ namespace Penguin.WinForms.Components
             this.DragIndex = INVALID_INDEX;
         }
 
+        protected virtual void OnScroll(ScrollEventArgs e)
+        {
+            ScrollEventHandler handler = this.Scroll;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         /// <summary>
         /// Overrides <see cref="M:System.Windows.Forms.Control.WndProc(System.Windows.Forms.Message@)" />.
         /// </summary>
@@ -258,10 +279,10 @@ namespace Penguin.WinForms.Components
                 case WM_PAINT:
                     this.OnWmPaint(ref m);
                     break;
+
                 case WM_VSCROLL:
                     OnScroll(new ScrollEventArgs((ScrollEventType)(m.WParam.ToInt32() & 0xffff), 0));
                     break;
-
             }
         }
 

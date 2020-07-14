@@ -27,6 +27,7 @@ namespace Penguin.WinForms.Extensions
         }
 
         public static bool ShowDialog(this FileDialog dialog, string FileName) => dialog.ShowDialog(FileName, null);
+
         public static bool ShowDialog(this FileDialog dialog, string FileName, Action<string> ifOk)
         {
             if (dialog is null)
@@ -44,6 +45,15 @@ namespace Penguin.WinForms.Extensions
 
             return false;
         }
-        public static void ShowDialog(this FileDialog dialog, Action<string> ifOk) => dialog.ShowDialog(dialog.FileName, ifOk);
+
+        public static void ShowDialog(this FileDialog dialog, Action<string> ifOk)
+        {
+            if (dialog is null)
+            {
+                throw new ArgumentNullException(nameof(dialog));
+            }
+
+            dialog.ShowDialog(dialog.FileName, ifOk);
+        }
     }
 }
