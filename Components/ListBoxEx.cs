@@ -124,7 +124,17 @@ namespace Penguin.WinForms.Components
 
                                 dragItem = this.Items[dragIndex];
 
-                                this.Items.Remove(dragItem);
+                                if (this.Items.Contains(dragItem))
+                                {
+                                    try
+                                    {
+                                        this.Items.Remove(dragItem);
+                                    } catch(IndexOutOfRangeException)
+                                    {
+                                        //It was there, and now its not?
+                                    }
+                                }
+
                                 this.Items.Insert(dropIndex, dragItem);
                                 this.SelectedItem = dragItem;
                             }

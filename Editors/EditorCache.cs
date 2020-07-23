@@ -12,9 +12,12 @@ namespace Penguin.WinForms.Editors
     {
         private static ConcurrentDictionary<string, CachedEditor> editorCache = new ConcurrentDictionary<string, CachedEditor>();
         private Panel ParentContainer;
-        internal EditorCache(string Id, Panel container, bool multiThread = true)
+        public string Id;
+        internal EditorCache(string id, Panel container, bool multiThread = true)
         {
-            if (!editorCache.TryGetValue(Id, out CachedEditor _cachedEditor))
+            this.Id = id;
+
+            if (!editorCache.TryGetValue(id, out CachedEditor _cachedEditor))
             {
                 cachedEditor = _cachedEditor;
 
@@ -41,7 +44,7 @@ namespace Penguin.WinForms.Editors
                     Container = Container
                 };
 
-                editorCache.TryAdd(Id, cachedEditor);
+                editorCache.TryAdd(id, cachedEditor);
             }
             else
             {
@@ -49,7 +52,7 @@ namespace Penguin.WinForms.Editors
 
                 if (!cachedEditor.IsDisposed)
                 {
-                    throw new AccessViolationException($"Editor with Id {Id} has not been properly disposed");
+                    throw new AccessViolationException($"Editor with Id {id} has not been properly disposed");
                 }
                 else
                 {
@@ -91,6 +94,8 @@ namespace Penguin.WinForms.Editors
         {
             if (!disposedValue)
             {
+
+                //editorCache.TryRemove(Id, out _);
 
                 this.cachedEditor.IsDisposed = true;
 
