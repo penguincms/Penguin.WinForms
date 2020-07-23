@@ -7,7 +7,7 @@ namespace Penguin.WinForms.Dialogs
     {
         private const string DEFAULT_TITLE = "An Exception Has Occurred";
 
-        public ExceptionDialog(Exception ex, string Title = DEFAULT_TITLE) : this($"{ex.Message}{System.Environment.NewLine}{System.Environment.NewLine}{ex.StackTrace}", Title)
+        public ExceptionDialog(Exception ex, string Title = DEFAULT_TITLE) : this($"{(ex ?? throw new ArgumentNullException(nameof(ex))).Message}{System.Environment.NewLine}{System.Environment.NewLine}{ex.StackTrace}", Title)
         {
         }
 

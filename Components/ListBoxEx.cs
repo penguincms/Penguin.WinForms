@@ -68,7 +68,6 @@ namespace Penguin.WinForms.Components
 
         public event ScrollEventHandler Scroll;
 
-
         #endregion Events
 
         #region Overridden Methods
@@ -270,6 +269,15 @@ namespace Penguin.WinForms.Components
             this.DragIndex = INVALID_INDEX;
         }
 
+        protected virtual void OnScroll(ScrollEventArgs e)
+        {
+            ScrollEventHandler handler = this.Scroll;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         /// <summary>
         /// Overrides <see cref="M:System.Windows.Forms.Control.WndProc(System.Windows.Forms.Message@)" />.
         /// </summary>
@@ -284,10 +292,10 @@ namespace Penguin.WinForms.Components
                 case WM_PAINT:
                     this.OnWmPaint(ref m);
                     break;
+
                 case WM_VSCROLL:
                     OnScroll(new ScrollEventArgs((ScrollEventType)(m.WParam.ToInt32() & 0xffff), 0));
                     break;
-
             }
         }
 

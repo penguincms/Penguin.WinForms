@@ -20,15 +20,14 @@ namespace Penguin.WinForms.Editors
 {
     public class ObjectEditor<T> : IDisposable
     {
-        public string EditorId { get; set; }
         public int ITEM_HEIGHT = 35;
         public int ITEM_SPACING = 3;
         public int LIST_PADDING = 25;
         public float WIDTH_PADDING_PER = .05f;
-
         private int _currentTop = 0;
-
+        private EditorCache EditorCache;
         private Action<T> OnSave;
+        private List<Action> ResizeActions = new List<Action>();
         private Dictionary<Type, string> ToolTipCache = new Dictionary<Type, string>();
 
         public int CurrentTop
@@ -43,6 +42,8 @@ namespace Penguin.WinForms.Editors
                 _currentTop = value;
             }
         }
+
+        public string EditorId { get; set; }
 
         public int PanelPadding
         {
@@ -65,8 +66,6 @@ namespace Penguin.WinForms.Editors
             }
         }
 
-        EditorCache EditorCache;
-
         public ObjectEditor(string editorId, T toEdit, Panel container, Action<T> onSave, bool multiThread = true)
         {
             if (container is null)
@@ -80,7 +79,7 @@ namespace Penguin.WinForms.Editors
 
             EditorCache.Container.Resize += (o, s) =>
             {
-                foreach(Action a in ResizeActions)
+                foreach (Action a in ResizeActions)
                 {
                     a.Invoke();
                 }
@@ -90,10 +89,9 @@ namespace Penguin.WinForms.Editors
 
             OnSave = onSave;
 
-            
-
             Load();
         }
+
         public int AddBoolItem(IBoolRowConstructorArguments arguments)
         {
             if (arguments is null)
@@ -133,8 +131,14 @@ namespace Penguin.WinForms.Editors
 
             return value.Height;
         }
+
         public int AddDropDownItem(IDropDownRowConstructorArguments arguments)
         {
+            if (arguments is null)
+            {
+                throw new ArgumentNullException(nameof(arguments));
+            }
+
             if (arguments.ReadOnly)
             {
                 return AddTextBoxItem(arguments);
@@ -144,7 +148,8 @@ namespace Penguin.WinForms.Editors
 
             ComboBox value = EditorCache.Request<ComboBox>();
 
-            Action resize = new Action(() => {
+            Action resize = new Action(() =>
+            {
                 value.Left = (EditorCache.Container.Width / 2);
                 value.Width = (EditorCache.Container.Width / 2) - PanelPadding;
             });
@@ -177,6 +182,11 @@ namespace Penguin.WinForms.Editors
 
         public void AddLabel(ILabelConstructorArguments arguments)
         {
+            if (arguments is null)
+            {
+                throw new ArgumentNullException(nameof(arguments));
+            }
+
             if (string.IsNullOrWhiteSpace(arguments.Name))
             {
                 return;
@@ -189,7 +199,7 @@ namespace Penguin.WinForms.Editors
             label.Height = ITEM_HEIGHT;
             label.Top = CurrentTop;
             label.Left = realLeft;
-            label.Text = arguments.Name;           
+            label.Text = arguments.Name;
             label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 
             Action resize = new Action(() =>
@@ -210,7 +220,6 @@ namespace Penguin.WinForms.Editors
 
                 toolTip.SetToolTip(label, arguments.ToolTip);
             }
-
         }
 
         public int AddTextBoxItem(ITextBoxRowConstructorArguments arguments)
@@ -333,21 +342,19 @@ namespace Penguin.WinForms.Editors
             }
             return toReturn;
         }
-        private List<Action> ResizeActions = new List<Action>();
 
         public void Load()
         {
             EditorCache.Container.SuspendDrawing();
 
             EditorCache.Clear();
-            
+
             CurrentTop = 0;
 
             Button saveButton = EditorCache.Request<Button>();
 
             //FixMe
             saveButton.Parent.Top = 0;
-            
 
             saveButton.Text = "Save";
             saveButton.Top = CurrentTop;
@@ -362,7 +369,6 @@ namespace Penguin.WinForms.Editors
             };
 
             CurrentTop += saveButton.Height + ITEM_SPACING;
-
 
             AddLabel(new LabelConstructorArguments(this.TemporaryObject.GetType().Name));
 
@@ -380,6 +386,11 @@ namespace Penguin.WinForms.Editors
                 objectType = value.GetType();
             }
 
+            if (objectType is null)
+            {
+                throw new ArgumentNullException(nameof(objectType));
+            }
+
             bool isString = objectType == typeof(string);
 
             bool isCollection = objectType.ImplementsInterface(typeof(IList<>));
@@ -395,9 +406,8 @@ namespace Penguin.WinForms.Editors
 
             string toolTipText = GetToolTipText(objectType);
 
-            if(objectType == typeof(bool))
+            if (objectType == typeof(bool))
             {
-
                 BoolRowConstructorArguments boolConstructorArguments = new BoolRowConstructorArguments()
                 {
                     Name = Name,
@@ -447,8 +457,6 @@ namespace Penguin.WinForms.Editors
                     ToolTip = toolTipText
                 });
 
-
-
                 Button addButton = EditorCache.Request<Button>();
 
                 addButton.Text = "Add";
@@ -458,7 +466,6 @@ namespace Penguin.WinForms.Editors
 
                 Action resize = new Action(() =>
                 {
-
                     addButton.Left = (EditorCache.Container.Width / 2);
                 });
 
@@ -468,7 +475,7 @@ namespace Penguin.WinForms.Editors
                 addButton.Click += (sender, e) =>
                 {
                     object toAdd = null;
-                    
+
                     if (collectionType == typeof(string))
                     {
                         toAdd = string.Empty;
@@ -623,8 +630,8 @@ namespace Penguin.WinForms.Editors
                     Render(renderException, typeof(RenderExceptionWrapper), pi.Name, left, (v) => { }, true);
                 }
 
-                try {
-
+                try
+                {
                     if (typeof(Exception).IsAssignableFrom(pi.PropertyType))
                     {
                         Exception ex = pi.GetValue(item) as Exception;
@@ -643,10 +650,9 @@ namespace Penguin.WinForms.Editors
                             pi.SetValue(item, renderableObject);
                         }
                     }
-
-                } catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
-
                     RenderException(ex);
                 }
             }
@@ -659,6 +665,11 @@ namespace Penguin.WinForms.Editors
 
         public bool TryCast(ValueChangedEventArgs valueChangeEventArgs, Type type, out object result)
         {
+            if (valueChangeEventArgs is null)
+            {
+                throw new ArgumentNullException(nameof(valueChangeEventArgs));
+            }
+
             result = null;
             try
             {
@@ -679,28 +690,8 @@ namespace Penguin.WinForms.Editors
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-
-                 this.EditorCache.Dispose();
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-         ~ObjectEditor()
-         {
-           // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-           Dispose(false);
-         }
 
         // This code added to correctly implement the disposable pattern.
         public void Dispose()
@@ -710,6 +701,27 @@ namespace Penguin.WinForms.Editors
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
-        #endregion
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                this.EditorCache.Dispose();
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        ~ObjectEditor()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(false);
+        }
+
+        #endregion IDisposable Support
     }
 }

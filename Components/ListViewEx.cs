@@ -11,6 +11,11 @@ namespace Penguin.WinForms.Components // May need to set to something else
     {
         protected override void OnDragDrop(DragEventArgs drgevent)
         {
+            if (drgevent is null)
+            {
+                throw new System.ArgumentNullException(nameof(drgevent));
+            }
+
             base.OnDragDrop(drgevent);
             //Return if the items are not selected in the ListView control.
             if (this.SelectedItems.Count == 0)
@@ -60,6 +65,11 @@ namespace Penguin.WinForms.Components // May need to set to something else
 
         protected override void OnDragEnter(DragEventArgs drgevent)
         {
+            if (drgevent is null)
+            {
+                throw new System.ArgumentNullException(nameof(drgevent));
+            }
+
             base.OnDragEnter(drgevent);
             int len = drgevent.Data.GetFormats().Length - 1;
             int i;
