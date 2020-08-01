@@ -269,15 +269,6 @@ namespace Penguin.WinForms.Components
             this.DragIndex = INVALID_INDEX;
         }
 
-        protected virtual void OnScroll(ScrollEventArgs e)
-        {
-            ScrollEventHandler handler = this.Scroll;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
         /// <summary>
         /// Overrides <see cref="M:System.Windows.Forms.Control.WndProc(System.Windows.Forms.Message@)" />.
         /// </summary>
