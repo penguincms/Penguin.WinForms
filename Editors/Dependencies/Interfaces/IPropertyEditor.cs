@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Penguin.WinForms.Editors.Dependencies.Interfaces
+﻿namespace Penguin.WinForms.Editors.Dependencies.Interfaces
 {
     public interface IPropertyEditor
     {

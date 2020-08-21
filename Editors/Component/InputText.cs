@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Penguin.WinForms.Editors.Component
@@ -25,68 +23,68 @@ namespace Penguin.WinForms.Editors.Component
 
             this.Text = Title;
 
-            TextBox = new TextBox()
+            this.TextBox = new TextBox()
             {
                 Text = defaultText
             };
 
 
-            this.Controls.Add(TextBox);
+            this.Controls.Add(this.TextBox);
 
-            SelectButton = new Button()
+            this.SelectButton = new Button()
             {
                 Text = "OK"
             };
 
-            CancelSelectionButton = new Button()
+            this.CancelSelectionButton = new Button()
             {
                 Text = "Cancel"
             };
 
-            SelectButton.Click += (sender, e) =>
+            this.SelectButton.Click += (sender, e) =>
             {
 
                 this.DialogResult = DialogResult.OK;
-                Result = TextBox.Text;
-                onSelect?.Invoke(Result);
+                this.Result = this.TextBox.Text;
+                onSelect?.Invoke(this.Result);
                 this.Close();
             };
 
-            CancelSelectionButton.Click += (sender, e) =>
+            this.CancelSelectionButton.Click += (sender, e) =>
             {
                 this.DialogResult = DialogResult.Cancel;
                 this.Close();
             };
 
-            this.Controls.Add(SelectButton);
-            this.Controls.Add(CancelSelectionButton);
+            this.Controls.Add(this.SelectButton);
+            this.Controls.Add(this.CancelSelectionButton);
 
-            ResizeObjects();
+            this.ResizeObjects();
         }
 
         protected override void OnResize(EventArgs e)
         {
-            ResizeObjects();
+            this.ResizeObjects();
             base.OnResize(e);
         }
 
         protected virtual void ResizeObjects()
         {
-            TextBox.Width = this.ClientSize.Width;
-            CancelSelectionButton.Width = SelectButton.Width = this.ClientSize.Width / 2;
+            this.TextBox.Width = this.ClientSize.Width;
+            this.CancelSelectionButton.Width = this.SelectButton.Width = this.ClientSize.Width / 2;
 
-            TextBox.Height = this.ClientSize.Height / 2;
-            CancelSelectionButton.Height = SelectButton.Height = TextBox.Height;
+            this.TextBox.Height = this.ClientSize.Height / 2;
+            this.CancelSelectionButton.Height = this.SelectButton.Height = this.TextBox.Height;
 
-            TextBox.Top = 0;
-            CancelSelectionButton.Top = SelectButton.Top = TextBox.Height;
+            this.TextBox.Top = 0;
+            this.CancelSelectionButton.Top = this.SelectButton.Top = this.TextBox.Height;
 
-            SelectButton.Left = this.ClientSize.Width / 2;
-            CancelSelectionButton.Left = 0;
+            this.SelectButton.Left = this.ClientSize.Width / 2;
+            this.CancelSelectionButton.Left = 0;
 
             this.ClientSize = new Size()
             {
-                Height = TextBox.Height + CancelSelectionButton.Height,
+                Height = this.TextBox.Height + this.CancelSelectionButton.Height,
                 Width = this.ClientSize.Width
             };
         }

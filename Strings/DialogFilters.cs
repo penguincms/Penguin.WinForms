@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Penguin.WinForms.Strings
+﻿namespace Penguin.WinForms.Strings
 {
     public static class DialogFilters
     {

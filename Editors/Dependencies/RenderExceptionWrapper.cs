@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Penguin.WinForms.Editors.Dependencies
 {
     public class RenderExceptionWrapper
     {
-        private Exception source;
-        public string Message => source?.Message;
-        public string StackTrace => source?.StackTrace;
-        public RenderExceptionWrapper(Exception renderException)
-        {
-            source = renderException;
-        }
+        private readonly Exception source;
+        public string Message => this.source?.Message;
+        public string StackTrace => this.source?.StackTrace;
+        public RenderExceptionWrapper(Exception renderException) => this.source = renderException;
     }
 }

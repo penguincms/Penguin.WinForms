@@ -1,8 +1,6 @@
 ﻿using Penguin.WinForms.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Penguin.WinForms.Editors.Component
@@ -16,9 +14,9 @@ namespace Penguin.WinForms.Editors.Component
 
         public static DialogResult ShowDialog(string text, string trueText = "Yes", string falseText = "No", string Title = "Please Select An Option", Action<bool> onSelect = null)
         {
-            PromptBool textdialog = new PromptBool(text, trueText , falseText, Title, onSelect);
+            PromptBool textdialog = new PromptBool(text, trueText, falseText, Title, onSelect);
 
-            return (textdialog as Form).ShowDialog();
+            return textdialog.ShowDialog();
         }
 
         public PromptBool(string text, string trueText = "Yes", string falseText = "No", string Title = "Please Select An Option", Action<bool> onSelect = null)
@@ -46,7 +44,7 @@ namespace Penguin.WinForms.Editors.Component
 
             this.Text = Title;
 
-            TextBox = new TextBox()
+            this.TextBox = new TextBox()
             {
                 Text = text,
                 ReadOnly = true,
@@ -55,66 +53,66 @@ namespace Penguin.WinForms.Editors.Component
             };
 
 
-            this.Controls.Add(TextBox);
+            this.Controls.Add(this.TextBox);
 
-            SelectButton = new Button()
+            this.SelectButton = new Button()
             {
                 Text = trueText
             };
 
-            CancelSelectionButton = new Button()
+            this.CancelSelectionButton = new Button()
             {
                 Text = falseText
             };
 
-            SelectButton.Click += (sender, e) =>
+            this.SelectButton.Click += (sender, e) =>
             {
 
                 this.DialogResult = DialogResult.OK;
-                Result = true;
-                onSelect?.Invoke(Result);
+                this.Result = true;
+                onSelect?.Invoke(this.Result);
                 this.Close();
             };
 
-            CancelSelectionButton.Click += (sender, e) =>
+            this.CancelSelectionButton.Click += (sender, e) =>
             {
                 this.DialogResult = DialogResult.OK;
-                Result = false;
-                onSelect?.Invoke(Result);
+                this.Result = false;
+                onSelect?.Invoke(this.Result);
                 this.Close();
             };
 
-            this.Controls.Add(SelectButton);
-            this.Controls.Add(CancelSelectionButton);
+            this.Controls.Add(this.SelectButton);
+            this.Controls.Add(this.CancelSelectionButton);
 
-            ResizeObjects();
+            this.ResizeObjects();
         }
 
         protected override void OnResize(EventArgs e)
         {
-            ResizeObjects();
+            this.ResizeObjects();
             base.OnResize(e);
         }
 
         protected virtual void ResizeObjects()
         {
-            TextBox.Width = this.ClientSize.Width;
-            CancelSelectionButton.Width = SelectButton.Width = this.ClientSize.Width / 2;
+            this.TextBox.Width = this.ClientSize.Width;
+            this.CancelSelectionButton.Width = this.SelectButton.Width = this.ClientSize.Width / 2;
 
-            TextBox.FitText();
+            this.TextBox.FitText();
 
-            CancelSelectionButton.Height = SelectButton.Height = TextBox.Height;
+            this.CancelSelectionButton.Height = this.SelectButton.Height = this.TextBox.Height;
 
-            TextBox.Top = 0;
-            CancelSelectionButton.Top = SelectButton.Top = TextBox.Height;
+            this.TextBox.Top = 0;
+            this.CancelSelectionButton.Top = this.SelectButton.Top = this.TextBox.Height;
 
-            SelectButton.Left = this.ClientSize.Width / 2;
-            CancelSelectionButton.Left = 0;
+            this.SelectButton.Left = this.ClientSize.Width / 2;
+            this.CancelSelectionButton.Left = 0;
 
 
             this.ClientSize = new Size()
             {
-                Height = TextBox.Height + CancelSelectionButton.Height,
+                Height = this.TextBox.Height + this.CancelSelectionButton.Height,
                 Width = this.ClientSize.Width
             };
         }

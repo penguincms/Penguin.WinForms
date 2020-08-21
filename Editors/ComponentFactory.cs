@@ -12,20 +12,20 @@ namespace Penguin.WinForms.Editors
     {
         private const bool REUSE_COMPONENTS = false;
 
-        private object bwLock = new object();
-        private static ConcurrentDictionary<Type, ConcurrentQueue<Control>> CachedComponents = new ConcurrentDictionary<Type, ConcurrentQueue<Control>>();
-        private Panel Container;
-        private ConcurrentDictionary<Type, Control> Defaults = new ConcurrentDictionary<Type, Control>();
+        private readonly object bwLock = new object();
+        private static readonly ConcurrentDictionary<Type, ConcurrentQueue<Control>> CachedComponents = new ConcurrentDictionary<Type, ConcurrentQueue<Control>>();
+        private readonly Panel Container;
+        private readonly ConcurrentDictionary<Type, Control> Defaults = new ConcurrentDictionary<Type, Control>();
 
-        private Queue<Control> ReturnQueue = new Queue<Control>();
+        private readonly Queue<Control> ReturnQueue = new Queue<Control>();
 
-        private BackgroundWorker returnThread;
+        private readonly BackgroundWorker returnThread;
 
         public void Clear()
         {
             if (!REUSE_COMPONENTS)
             {
-                Container.Controls.Clear();
+                this.Container.Controls.Clear();
             }
             else
             {
@@ -49,7 +49,7 @@ namespace Penguin.WinForms.Editors
                 }
             }
         }
-        private bool MultiThread;
+        private readonly bool MultiThread;
         internal ComponentFactory(Panel container, bool multiThread = true)
         {
 
@@ -83,7 +83,7 @@ namespace Penguin.WinForms.Editors
 
         internal void Return<T>(T control) where T : Control
         {
-            if(!REUSE_COMPONENTS)
+            if (!REUSE_COMPONENTS)
             {
                 this.Container.Controls.Remove(control);
                 return;
@@ -155,7 +155,7 @@ namespace Penguin.WinForms.Editors
             foreach (FieldInfo fi in fields)
             {
 
-                if(!fi.Name.StartsWith("Event"))
+                if (!fi.Name.StartsWith("Event"))
                 {
                     continue;
                 }
@@ -164,7 +164,7 @@ namespace Penguin.WinForms.Editors
 
                 object val = eventHandlerList[key];
 
-                if(val is null)
+                if (val is null)
                 {
                     continue;
                 }
@@ -243,7 +243,8 @@ namespace Penguin.WinForms.Editors
                 {
                     this.Return(c);
                 }
-            } else
+            }
+            else
             {
                 this.Container.Controls.Clear();
             }
@@ -273,13 +274,9 @@ namespace Penguin.WinForms.Editors
         // }
 
         // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
+        public void Dispose() =>
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            this.Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
+            this.Dispose(true);// TODO: uncomment the following line if the finalizer is overridden above.// GC.SuppressFinalize(this);
         #endregion
     }
 }

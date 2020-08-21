@@ -71,10 +71,7 @@ namespace Penguin.WinForms.Components
         #endregion Events
 
         #region Overridden Methods
-        protected virtual void OnScroll(ScrollEventArgs e)
-        {
-            this.Scroll?.Invoke(this, e);
-        }
+        protected virtual void OnScroll(ScrollEventArgs e) => this.Scroll?.Invoke(this, e);
         /// <summary>
         /// Raises the <see cref="E:System.Windows.Forms.Control.DragDrop"/> event.
         /// </summary>
@@ -128,7 +125,8 @@ namespace Penguin.WinForms.Components
                                     try
                                     {
                                         this.Items.Remove(dragItem);
-                                    } catch(IndexOutOfRangeException)
+                                    }
+                                    catch (IndexOutOfRangeException)
                                     {
                                         //It was there, and now its not?
                                     }
@@ -285,7 +283,7 @@ namespace Penguin.WinForms.Components
                     break;
 
                 case WM_VSCROLL:
-                    OnScroll(new ScrollEventArgs((ScrollEventType)(m.WParam.ToInt32() & 0xffff), 0));
+                    this.OnScroll(new ScrollEventArgs((ScrollEventType)(m.WParam.ToInt32() & 0xffff), 0));
                     break;
             }
         }
@@ -298,12 +296,12 @@ namespace Penguin.WinForms.Components
         [DefaultValue(false)]
         public virtual bool AllowItemDrag
         {
-            get { return _allowItemDrag; }
+            get => this._allowItemDrag;
             set
             {
                 if (this.AllowItemDrag != value)
                 {
-                    _allowItemDrag = value;
+                    this._allowItemDrag = value;
 
                     this.OnAllowItemDragChanged(EventArgs.Empty);
                 }
@@ -318,12 +316,12 @@ namespace Penguin.WinForms.Components
         [DefaultValue(typeof(Color), "Red")]
         public virtual Color InsertionLineColor
         {
-            get { return _insertionLineColor; }
+            get => this._insertionLineColor;
             set
             {
                 if (this.InsertionLineColor != value)
                 {
-                    _insertionLineColor = value;
+                    this._insertionLineColor = value;
 
                     this.OnInsertionLineColorChanged(EventArgs.Empty);
                 }
@@ -424,10 +422,7 @@ namespace Penguin.WinForms.Components
             handler?.Invoke(this, e);
         }
 
-        protected virtual void OnWmPaint(ref Message m)
-        {
-            this.DrawInsertionLine();
-        }
+        protected virtual void OnWmPaint(ref Message m) => this.DrawInsertionLine();
 
         #endregion Protected Members
 

@@ -18,14 +18,14 @@
 //                (tb) => tb.Text,
 //                (tb, v) => tb.Text = v
 //            );
-            
+
 //            bool disableEvents = false;
 
 //            tb.ReadOnly = IsReadOnly(property);
 
 //            if (!tb.ReadOnly)
 //            {
-                
+
 //                tb.TextChanged += (o, s) =>
 //                {
 //                    if (!disableEvents)

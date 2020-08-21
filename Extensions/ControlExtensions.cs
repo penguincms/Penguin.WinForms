@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Penguin.WinForms.Extensions
@@ -10,7 +8,7 @@ namespace Penguin.WinForms.Extensions
     {
 
         [DllImport("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
+        public static extern int SendMessage(IntPtr hWnd, int wMsg, bool wParam, int lParam);
 
         private const int WM_SETREDRAW = 11;
 

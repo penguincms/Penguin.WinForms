@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Penguin.WinForms.Editors
 {
     internal class EditorCache : IDisposable
     {
-        private static ConcurrentDictionary<string, CachedEditor> editorCache = new ConcurrentDictionary<string, CachedEditor>();
-        private Panel ParentContainer;
+        private static readonly ConcurrentDictionary<string, CachedEditor> editorCache = new ConcurrentDictionary<string, CachedEditor>();
+        private readonly Panel ParentContainer;
         public string Id;
         internal EditorCache(string id, Panel container, bool multiThread = true)
         {
@@ -19,59 +16,59 @@ namespace Penguin.WinForms.Editors
 
             if (!editorCache.TryGetValue(id, out CachedEditor _cachedEditor))
             {
-                cachedEditor = _cachedEditor;
+                this.cachedEditor = _cachedEditor;
 
-                Container = new Panel();
-                ComponentFactory = new ComponentFactory(Container, multiThread);
+                this.Container = new Panel();
+                this.ComponentFactory = new ComponentFactory(this.Container, multiThread);
 
                 container.HorizontalScroll.Maximum = 0;
                 container.VerticalScroll.Visible = false;
                 container.AutoScroll = true;
-                Container.Width = container.Width;
+                this.Container.Width = container.Width;
 
                 container.Resize += (sender, e) =>
                 {
-                    Container.Width = container.Width;
-                    Container.Top = 0;
-                    Container.Left = 0;
+                    this.Container.Width = container.Width;
+                    this.Container.Top = 0;
+                    this.Container.Left = 0;
                 };
 
 
 
-                cachedEditor = new CachedEditor()
+                this.cachedEditor = new CachedEditor()
                 {
                     ComponentFactory = ComponentFactory,
                     Container = Container
                 };
 
-                editorCache.TryAdd(id, cachedEditor);
+                editorCache.TryAdd(id, this.cachedEditor);
             }
             else
             {
-                cachedEditor = _cachedEditor;
+                this.cachedEditor = _cachedEditor;
 
-                if (!cachedEditor.IsDisposed)
+                if (!this.cachedEditor.IsDisposed)
                 {
                     throw new AccessViolationException($"Editor with Id {id} has not been properly disposed");
                 }
                 else
                 {
-                    cachedEditor.IsDisposed = false;
+                    this.cachedEditor.IsDisposed = false;
                 }
 
-                Container = cachedEditor.Container;
-                ComponentFactory = cachedEditor.ComponentFactory;
+                this.Container = this.cachedEditor.Container;
+                this.ComponentFactory = this.cachedEditor.ComponentFactory;
             }
 
-            ParentContainer = container;
-            container.Controls.Add(Container);
+            this.ParentContainer = container;
+            container.Controls.Add(this.Container);
         }
 
         public Panel Container { get; private set; }
         private ComponentFactory ComponentFactory { get; set; }
 
         private CachedEditor cachedEditor { get; set; }
-        public IEnumerable<Control> ActiveControls => ComponentFactory.ActiveControls;
+        public IEnumerable<Control> ActiveControls => this.ComponentFactory.ActiveControls;
 
         private class CachedEditor
         {
@@ -82,7 +79,7 @@ namespace Penguin.WinForms.Editors
 
         internal T Request<T>() where T : Control
         {
-            T c = ComponentFactory.Request<T>();
+            T c = this.ComponentFactory.Request<T>();
 
             return c;
         }
@@ -92,20 +89,20 @@ namespace Penguin.WinForms.Editors
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!this.disposedValue)
             {
 
                 //editorCache.TryRemove(Id, out _);
 
                 this.cachedEditor.IsDisposed = true;
 
-                ComponentFactory.ParentDisposed();
+                this.ComponentFactory.ParentDisposed();
 
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
-                disposedValue = true;
+                this.disposedValue = true;
             }
         }
 
@@ -113,23 +110,19 @@ namespace Penguin.WinForms.Editors
         ~EditorCache()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(false);
+            this.Dispose(false);
         }
 
         // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
+        public void Dispose() =>
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
+            this.Dispose(true);// TODO: uncomment the following line if the finalizer is overridden above.// GC.SuppressFinalize(this);
 
         internal void Clear()
         {
-            ParentContainer.VerticalScroll.Value = 0;
-            Container.Top = 0;
-            ComponentFactory.Clear();
+            this.ParentContainer.VerticalScroll.Value = 0;
+            this.Container.Top = 0;
+            this.ComponentFactory.Clear();
         }
         #endregion
     }

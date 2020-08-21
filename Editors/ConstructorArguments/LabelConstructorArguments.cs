@@ -16,9 +16,6 @@ namespace Penguin.WinForms.Editors.ConstructorArguments
 
         public string ToolTip { get; set; }
 
-        public LabelConstructorArguments(string labelText)
-        {
-            Name = labelText;
-        }
+        public LabelConstructorArguments(string labelText) => this.Name = labelText;
     }
 }
