@@ -8,16 +8,9 @@ namespace Penguin.WinForms.Editors.Component
     public class PromptBool : Form
     {
         protected Button CancelSelectionButton;
-        protected TextBox TextBox;
         protected Button SelectButton;
+        protected TextBox TextBox;
         public bool Result { get; protected set; }
-
-        public static DialogResult ShowDialog(string text, string trueText = "Yes", string falseText = "No", string Title = "Please Select An Option", Action<bool> onSelect = null)
-        {
-            PromptBool textdialog = new PromptBool(text, trueText, falseText, Title, onSelect);
-
-            return textdialog.ShowDialog();
-        }
 
         public PromptBool(string text, string trueText = "Yes", string falseText = "No", string Title = "Please Select An Option", Action<bool> onSelect = null)
         {
@@ -41,7 +34,6 @@ namespace Penguin.WinForms.Editors.Component
                 throw new ArgumentException("message", nameof(Title));
             }
 
-
             this.Text = Title;
 
             this.TextBox = new TextBox()
@@ -51,7 +43,6 @@ namespace Penguin.WinForms.Editors.Component
                 Multiline = true,
                 BackColor = System.Drawing.SystemColors.Control
             };
-
 
             this.Controls.Add(this.TextBox);
 
@@ -67,7 +58,6 @@ namespace Penguin.WinForms.Editors.Component
 
             this.SelectButton.Click += (sender, e) =>
             {
-
                 this.DialogResult = DialogResult.OK;
                 this.Result = true;
                 onSelect?.Invoke(this.Result);
@@ -86,6 +76,13 @@ namespace Penguin.WinForms.Editors.Component
             this.Controls.Add(this.CancelSelectionButton);
 
             this.ResizeObjects();
+        }
+
+        public static DialogResult ShowDialog(string text, string trueText = "Yes", string falseText = "No", string Title = "Please Select An Option", Action<bool> onSelect = null)
+        {
+            PromptBool textdialog = new PromptBool(text, trueText, falseText, Title, onSelect);
+
+            return textdialog.ShowDialog();
         }
 
         protected override void OnResize(EventArgs e)
@@ -109,7 +106,6 @@ namespace Penguin.WinForms.Editors.Component
             this.SelectButton.Left = this.ClientSize.Width / 2;
             this.CancelSelectionButton.Left = 0;
 
-
             this.ClientSize = new Size()
             {
                 Height = this.TextBox.Height + this.CancelSelectionButton.Height,
@@ -117,7 +113,7 @@ namespace Penguin.WinForms.Editors.Component
             };
         }
 
-        private void InitializeComponent()
+        public void InitializeComponent()
         {
             this.SuspendLayout();
             //

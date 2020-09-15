@@ -71,7 +71,7 @@ namespace Penguin.WinForms.Components
         #endregion Events
 
         #region Overridden Methods
-        protected virtual void OnScroll(ScrollEventArgs e) => this.Scroll?.Invoke(this, e);
+
         /// <summary>
         /// Raises the <see cref="E:System.Windows.Forms.Control.DragDrop"/> event.
         /// </summary>
@@ -267,6 +267,8 @@ namespace Penguin.WinForms.Components
             this.DragIndex = INVALID_INDEX;
         }
 
+        protected virtual void OnScroll(ScrollEventArgs e) => this.Scroll?.Invoke(this, e);
+
         /// <summary>
         /// Overrides <see cref="M:System.Windows.Forms.Control.WndProc(System.Windows.Forms.Message@)" />.
         /// </summary>
@@ -444,7 +446,7 @@ namespace Penguin.WinForms.Components
                     int width;
 
                     bounds = this.GetItemRectangle(this.InsertionIndex);
-                    x = 0; // aways fit the line to the client area, regardless of how the user is scrolling
+                    x = 0; // always fit the line to the client area, regardless of how the user is scrolling
                     y = this.InsertionMode == InsertionMode.Before ? bounds.Top : bounds.Bottom;
                     width = Math.Min(bounds.Width - bounds.Left, this.ClientSize.Width); // again, make sure the full width fits in the client area
 

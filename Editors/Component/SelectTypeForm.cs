@@ -5,13 +5,6 @@ using System.Linq;
 
 namespace Penguin.WinForms.Editors.Component
 {
-    public enum SelectTypeDisplayStyle
-    {
-        Name,
-        FullName,
-        ToString
-    }
-
     public class SelectTypeForm : SelectForm<Type>
     {
         public SelectTypeForm(Type baseType, SelectTypeDisplayStyle style = SelectTypeDisplayStyle.Name, Action<Type> onSelect = null) : base(GetOptions(baseType), "Please Select A Type", onSelect, GetDisplayFunc(style))
@@ -44,20 +37,13 @@ namespace Penguin.WinForms.Editors.Component
 
         private static Func<Type, string> GetDisplayFunc(SelectTypeDisplayStyle style)
         {
-            switch (style)
+            return style switch
             {
-                case SelectTypeDisplayStyle.Name:
-                    return new Func<Type, string>((t) => t.Name);
-
-                case SelectTypeDisplayStyle.FullName:
-                    return new Func<Type, string>((t) => t.FullName);
-
-                case SelectTypeDisplayStyle.ToString:
-                    return new Func<Type, string>((t) => t.ToString());
-
-                default:
-                    throw new ArgumentException($"Unhandled type display style {style}", "style");
-            }
+                SelectTypeDisplayStyle.Name => new Func<Type, string>((t) => t.Name),
+                SelectTypeDisplayStyle.FullName => new Func<Type, string>((t) => t.FullName),
+                SelectTypeDisplayStyle.ToString => new Func<Type, string>((t) => t.ToString()),
+                _ => throw new ArgumentException($"Unhandled type display style {style}", "style"),
+            };
         }
     }
 }

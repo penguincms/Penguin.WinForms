@@ -21,10 +21,7 @@ namespace Penguin.WinForms.Editors.Component
                 throw new ArgumentNullException(nameof(options));
             }
 
-            displayText = displayText ?? new Func<T, string>((t) =>
-            {
-                return t.ToString();
-            });
+            displayText ??= new Func<T, string>((t) => t.ToString());
 
             this.Options = options.ToList();
 
@@ -123,7 +120,7 @@ namespace Penguin.WinForms.Editors.Component
             };
         }
 
-        private void InitializeComponent()
+        public void InitializeComponent()
         {
             this.SuspendLayout();
             //

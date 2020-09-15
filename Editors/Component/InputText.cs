@@ -7,27 +7,18 @@ namespace Penguin.WinForms.Editors.Component
     public class InputText : Form
     {
         protected Button CancelSelectionButton;
-        protected TextBox TextBox;
         protected Button SelectButton;
+        protected TextBox TextBox;
         public string Result { get; protected set; }
-
-        public static DialogResult ShowDialog(string Title = "Please Select An Option", string defaultText = "", Action<string> onSelect = null)
-        {
-            InputText textdialog = new InputText(Title, defaultText, onSelect);
-
-            return (textdialog as Form).ShowDialog();
-        }
 
         public InputText(string Title = "Please Select An Option", string defaultText = "", Action<string> onSelect = null)
         {
-
             this.Text = Title;
 
             this.TextBox = new TextBox()
             {
                 Text = defaultText
             };
-
 
             this.Controls.Add(this.TextBox);
 
@@ -43,7 +34,6 @@ namespace Penguin.WinForms.Editors.Component
 
             this.SelectButton.Click += (sender, e) =>
             {
-
                 this.DialogResult = DialogResult.OK;
                 this.Result = this.TextBox.Text;
                 onSelect?.Invoke(this.Result);
@@ -60,6 +50,13 @@ namespace Penguin.WinForms.Editors.Component
             this.Controls.Add(this.CancelSelectionButton);
 
             this.ResizeObjects();
+        }
+
+        public static DialogResult ShowDialog(string Title = "Please Select An Option", string defaultText = "", Action<string> onSelect = null)
+        {
+            InputText textdialog = new InputText(Title, defaultText, onSelect);
+
+            return (textdialog as Form).ShowDialog();
         }
 
         protected override void OnResize(EventArgs e)
@@ -89,7 +86,7 @@ namespace Penguin.WinForms.Editors.Component
             };
         }
 
-        private void InitializeComponent()
+        public void InitializeComponent()
         {
             this.SuspendLayout();
             //

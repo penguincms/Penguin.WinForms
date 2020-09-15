@@ -6,7 +6,9 @@ namespace Penguin.WinForms.Extensions
     public static class ContextMenuStripExtensions
     {
         public static ToolStripMenuItem AddItem(this ContextMenuStrip menu, string DisplayText, Action toExecute) => menu.AddItem(DisplayText, (e) => toExecute.Invoke());
+
         public static ToolStripMenuItem AddItem(this ContextMenuStrip menu, string DisplayText, Action<EventArgs> toExecute) => menu.AddItem(DisplayText, (sender, e) => toExecute.Invoke(e));
+
         public static ToolStripMenuItem AddItem(this ContextMenuStrip menu, string DisplayText, Action<object, EventArgs> toExecute)
         {
             if (menu is null)
