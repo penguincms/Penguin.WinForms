@@ -14,8 +14,8 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
     <PackageReference Include="Penguin.Reflection" Version="5.0.1-TA2OIRX" />
-    <PackageReference Include="Penguin.Json" Version="5.0.1-TA2OIRX" />
-    <PackageReference Include="Penguin.Reflection.Extensions" Version="5.0.1-TA2OIRX" />
+    <PackageReference Include="Penguin.Json" Version="5.0.1-TA2VU4J" />
+    <PackageReference Include="Penguin.Reflection.Extensions" Version="5.0.1-TA2VU4J" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Editors\Component\PromptBool.cs">
