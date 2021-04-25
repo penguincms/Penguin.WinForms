@@ -4,7 +4,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <PackageProjectUrl>https://github.com/penguincms/Penguin.WinForms</PackageProjectUrl>
     <DocumentationFile>Penguin.WinForms.xml</DocumentationFile>
-    <Version>5.0.1</Version>
+    <Version>5.0.5</Version>
     <AssemblyName>Penguin.WinForms</AssemblyName>
     <RootNamespace>Penguin.WinForms</RootNamespace>
     <Description>Not Available</Description>
