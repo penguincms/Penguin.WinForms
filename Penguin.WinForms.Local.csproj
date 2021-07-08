@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <PackageProjectUrl>https://github.com/penguincms/Penguin.WinForms</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/PenguinCMS/Penguin.WinForms</PackageProjectUrl>
     <DocumentationFile>Penguin.WinForms.xml</DocumentationFile>
     <Version>5.0.5</Version>
     <AssemblyName>Penguin.WinForms</AssemblyName>
@@ -16,6 +16,7 @@
     <ProjectReference Include="..\Penguin.Debugging\Penguin.Debugging.Local.csproj" />
     <ProjectReference Include="..\Penguin.Extensions.Exceptions\Penguin.Extensions.Exceptions.Local.csproj" />
     <ProjectReference Include="..\Penguin.Extensions.String\Penguin.Extensions.String.Local.csproj" />
+    <ProjectReference Include="..\Penguin.FileStreams\Penguin.FileStreams.Local.csproj" />
     <ProjectReference Include="..\Penguin.Json\Penguin.Json.Local.csproj" />
     <ProjectReference Include="..\Penguin.Json.Abstractions\Penguin.Json.Abstractions.Local.csproj" />
     <ProjectReference Include="..\Penguin.Reflection\Penguin.Reflection.Local.csproj" />
