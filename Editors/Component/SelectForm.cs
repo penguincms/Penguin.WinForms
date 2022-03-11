@@ -53,10 +53,7 @@ namespace Penguin.WinForms.Editors.Component
                 this.SelectBox.Items.Add(displayText.Invoke(o));
             }
 
-            this.SelectBox.SelectedIndexChanged += (sender, e) =>
-            {
-                this.SelectButton.Enabled = this.SelectBox.SelectedIndex != 0;
-            };
+            this.SelectBox.SelectedIndexChanged += (sender, e) => this.SelectButton.Enabled = this.SelectBox.SelectedIndex != 0;
 
             this.Controls.Add(this.SelectBox);
 

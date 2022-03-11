@@ -182,10 +182,7 @@ namespace Penguin.WinForms.Editors
                 TextAlign = System.Drawing.ContentAlignment.MiddleLeft
             });
 
-            Action resize = new Action(() =>
-            {
-                label.Width = (this.Container.Width / 2) - realLeft;
-            });
+            Action resize = new Action(() => label.Width = (this.Container.Width / 2) - realLeft);
 
             resize.Invoke();
             this.ResizeActions.Add(resize);
@@ -341,10 +338,7 @@ namespace Penguin.WinForms.Editors
 
             //FixMe
             saveButton.Parent.Top = 0;
-            saveButton.Click += (sender, e) =>
-            {
-                this.OnSave.Invoke(this.Retrieve());
-            };
+            saveButton.Click += (sender, e) => this.OnSave.Invoke(this.Retrieve());
 
             this.CurrentTop += saveButton.Height + this.ITEM_SPACING;
 
@@ -441,10 +435,7 @@ namespace Penguin.WinForms.Editors
                     Width = 85
                 });
 
-                Action resize = new Action(() =>
-                {
-                    addButton.Left = (this.Container.Width / 2);
-                });
+                Action resize = new Action(() => addButton.Left = (this.Container.Width / 2));
 
                 resize.Invoke();
                 this.ResizeActions.Add(resize);
