@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -39,7 +39,6 @@ namespace Penguin.WinForms.Components
                 this.ClientSize = new Size(this.ClientSize.Width, end.Y + height);
             }
         }
-
 
         // Make the TextBox fit its new contents.
         private void TxtContents_TextChanged(object sender, EventArgs e) => this.CallAutoSize();
