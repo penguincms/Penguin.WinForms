@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <PackageProjectUrl>https://github.com/PenguinCMS/Penguin.WinForms</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/PenguinCms/Penguin.WinForms</PackageProjectUrl>
     <DocumentationFile>Penguin.WinForms.xml</DocumentationFile>
     <Version>5.0.5</Version>
     <AssemblyName>Penguin.WinForms</AssemblyName>
