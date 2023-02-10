@@ -32,7 +32,7 @@ namespace Penguin.WinForms.Extensions
                 throw new ArgumentNullException(nameof(parent));
             }
 
-            SendMessage(parent.Handle, WM_SETREDRAW, true, 0);
+            _ = SendMessage(parent.Handle, WM_SETREDRAW, true, 0);
             parent.Refresh();
         }
 
@@ -46,7 +46,7 @@ namespace Penguin.WinForms.Extensions
                 throw new ArgumentNullException(nameof(parent));
             }
 
-            SendMessage(parent.Handle, WM_SETREDRAW, false, 0);
+            _ = SendMessage(parent.Handle, WM_SETREDRAW, false, 0);
         }
     }
 }

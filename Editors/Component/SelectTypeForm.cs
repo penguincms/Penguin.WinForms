@@ -18,7 +18,7 @@ namespace Penguin.WinForms.Editors.Component
                 throw new ArgumentNullException(nameof(baseType));
             }
 
-            List<Type> TypeOptions = new List<Type>()
+            List<Type> TypeOptions = new()
                 {
                     baseType
                 };
@@ -42,7 +42,7 @@ namespace Penguin.WinForms.Editors.Component
                 SelectTypeDisplayStyle.Name => new Func<Type, string>((t) => t.Name),
                 SelectTypeDisplayStyle.FullName => new Func<Type, string>((t) => t.FullName),
                 SelectTypeDisplayStyle.ToString => new Func<Type, string>((t) => t.ToString()),
-                _ => throw new ArgumentException($"Unhandled type display style {style}", "style"),
+                _ => throw new ArgumentException($"Unhandled type display style {style}", nameof(style)),
             };
         }
     }

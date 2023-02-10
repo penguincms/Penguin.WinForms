@@ -33,9 +33,9 @@ namespace Penguin.WinForms.Components
 
         public ListBoxEx()
         {
-            this.DoubleBuffered = true;
-            this.InsertionLineColor = Color.Red;
-            this.InsertionIndex = INVALID_INDEX;
+            DoubleBuffered = true;
+            InsertionLineColor = Color.Red;
+            InsertionIndex = INVALID_INDEX;
         }
 
         #endregion Public Constructors
@@ -83,23 +83,23 @@ namespace Penguin.WinForms.Components
                 throw new ArgumentNullException(nameof(drgevent));
             }
 
-            if (this.IsDragging)
+            if (IsDragging)
             {
                 try
                 {
-                    if (this.InsertionIndex != INVALID_INDEX)
+                    if (InsertionIndex != INVALID_INDEX)
                     {
                         int dragIndex;
                         int dropIndex;
 
                         dragIndex = (int)drgevent.Data.GetData(typeof(int));
-                        dropIndex = this.InsertionIndex;
+                        dropIndex = InsertionIndex;
 
                         if (dragIndex < dropIndex)
                         {
                             dropIndex--;
                         }
-                        if (this.InsertionMode == InsertionMode.After && dragIndex < this.Items.Count - 1)
+                        if (InsertionMode == InsertionMode.After && dragIndex < Items.Count - 1)
                         {
                             dropIndex++;
                         }
@@ -109,22 +109,22 @@ namespace Penguin.WinForms.Components
                             ListBoxExItemDragEventArgs args;
                             Point clientPoint;
 
-                            clientPoint = this.PointToClient(new Point(drgevent.X, drgevent.Y));
-                            args = new ListBoxExItemDragEventArgs(dragIndex, dropIndex, this.InsertionMode, clientPoint.X, clientPoint.Y);
+                            clientPoint = PointToClient(new Point(drgevent.X, drgevent.Y));
+                            args = new ListBoxExItemDragEventArgs(dragIndex, dropIndex, InsertionMode, clientPoint.X, clientPoint.Y);
 
-                            this.OnItemDrag(args);
+                            OnItemDrag(args);
 
                             if (!args.Cancel)
                             {
                                 object dragItem;
 
-                                dragItem = this.Items[dragIndex];
+                                dragItem = Items[dragIndex];
 
-                                if (this.Items.Contains(dragItem))
+                                if (Items.Contains(dragItem))
                                 {
                                     try
                                     {
-                                        this.Items.Remove(dragItem);
+                                        Items.Remove(dragItem);
                                     }
                                     catch (IndexOutOfRangeException)
                                     {
@@ -132,20 +132,20 @@ namespace Penguin.WinForms.Components
                                     }
                                 }
 
-                                this.Items.Insert(dropIndex, dragItem);
-                                this.SelectedItem = dragItem;
+                                Items.Insert(dropIndex, dragItem);
+                                SelectedItem = dragItem;
                             }
                         }
 
-                        this.DragIndex = INVALID_INDEX;
+                        DragIndex = INVALID_INDEX;
                     }
                 }
                 finally
                 {
-                    this.Invalidate(this.InsertionIndex);
-                    this.InsertionIndex = INVALID_INDEX;
-                    this.InsertionMode = InsertionMode.None;
-                    this.IsDragging = false;
+                    Invalidate(InsertionIndex);
+                    InsertionIndex = INVALID_INDEX;
+                    InsertionMode = InsertionMode.None;
+                    IsDragging = false;
                 }
             }
 
@@ -154,9 +154,9 @@ namespace Penguin.WinForms.Components
 
         protected override void OnDragLeave(EventArgs e)
         {
-            this.Invalidate(this.InsertionIndex);
-            this.InsertionIndex = INVALID_INDEX;
-            this.InsertionMode = InsertionMode.None;
+            Invalidate(InsertionIndex);
+            InsertionIndex = INVALID_INDEX;
+            InsertionMode = InsertionMode.None;
 
             base.OnDragLeave(e);
         }
@@ -168,20 +168,20 @@ namespace Penguin.WinForms.Components
                 throw new ArgumentNullException(nameof(drgevent));
             }
 
-            if (this.IsDragging)
+            if (IsDragging)
             {
                 int insertionIndex;
                 InsertionMode insertionMode;
                 Point clientPoint;
 
-                clientPoint = this.PointToClient(new Point(drgevent.X, drgevent.Y));
-                insertionIndex = this.IndexFromPoint(clientPoint);
+                clientPoint = PointToClient(new Point(drgevent.X, drgevent.Y));
+                insertionIndex = IndexFromPoint(clientPoint);
 
                 if (insertionIndex != INVALID_INDEX)
                 {
                     Rectangle bounds;
 
-                    bounds = this.GetItemRectangle(insertionIndex);
+                    bounds = GetItemRectangle(insertionIndex);
                     insertionMode = clientPoint.Y < bounds.Top + (bounds.Height / 2) ? InsertionMode.Before : InsertionMode.After;
 
                     drgevent.Effect = DragDropEffects.Move;
@@ -194,12 +194,12 @@ namespace Penguin.WinForms.Components
                     drgevent.Effect = DragDropEffects.None;
                 }
 
-                if (insertionIndex != this.InsertionIndex || insertionMode != this.InsertionMode)
+                if (insertionIndex != InsertionIndex || insertionMode != InsertionMode)
                 {
-                    this.Invalidate(this.InsertionIndex); // clear the previous item
-                    this.InsertionMode = insertionMode;
-                    this.InsertionIndex = insertionIndex;
-                    this.Invalidate(this.InsertionIndex); // draw the new item
+                    Invalidate(InsertionIndex); // clear the previous item
+                    InsertionMode = insertionMode;
+                    InsertionIndex = insertionIndex;
+                    Invalidate(InsertionIndex); // draw the new item
                 }
             }
 
@@ -221,13 +221,13 @@ namespace Penguin.WinForms.Components
 
             if (e.Button == MouseButtons.Left)
             {
-                this.DragOrigin = e.Location;
-                this.DragIndex = this.IndexFromPoint(e.Location);
+                DragOrigin = e.Location;
+                DragIndex = IndexFromPoint(e.Location);
             }
             else
             {
-                this.DragOrigin = Point.Empty;
-                this.DragIndex = INVALID_INDEX;
+                DragOrigin = Point.Empty;
+                DragIndex = INVALID_INDEX;
             }
         }
 
@@ -242,18 +242,18 @@ namespace Penguin.WinForms.Components
                 throw new ArgumentNullException(nameof(e));
             }
 
-            if (this.AllowItemDrag && !this.IsDragging && e.Button == MouseButtons.Left && this.IsOutsideDragZone(e.Location) && this.DragIndex != INVALID_INDEX)
+            if (AllowItemDrag && !IsDragging && e.Button == MouseButtons.Left && IsOutsideDragZone(e.Location) && DragIndex != INVALID_INDEX)
             {
                 CancelListBoxExItemDragEventArgs args;
 
-                args = new CancelListBoxExItemDragEventArgs(this.DragIndex);
+                args = new CancelListBoxExItemDragEventArgs(DragIndex);
 
-                this.OnItemDragging(args);
+                OnItemDragging(args);
 
                 if (!args.Cancel)
                 {
-                    this.IsDragging = true;
-                    this.DoDragDrop(this.DragIndex, DragDropEffects.Move);
+                    IsDragging = true;
+                    _ = DoDragDrop(DragIndex, DragDropEffects.Move);
                 }
             }
 
@@ -264,10 +264,13 @@ namespace Penguin.WinForms.Components
         {
             base.OnMouseUp(e);
 
-            this.DragIndex = INVALID_INDEX;
+            DragIndex = INVALID_INDEX;
         }
 
-        protected virtual void OnScroll(ScrollEventArgs e) => this.Scroll?.Invoke(this, e);
+        protected virtual void OnScroll(ScrollEventArgs e)
+        {
+            Scroll?.Invoke(this, e);
+        }
 
         /// <summary>
         /// Overrides <see cref="M:System.Windows.Forms.Control.WndProc(System.Windows.Forms.Message@)" />.
@@ -281,11 +284,11 @@ namespace Penguin.WinForms.Components
             switch (m.Msg)
             {
                 case WM_PAINT:
-                    this.OnWmPaint(ref m);
+                    OnWmPaint(ref m);
                     break;
 
                 case WM_VSCROLL:
-                    this.OnScroll(new ScrollEventArgs((ScrollEventType)(m.WParam.ToInt32() & 0xffff), 0));
+                    OnScroll(new ScrollEventArgs((ScrollEventType)(m.WParam.ToInt32() & 0xffff), 0));
                     break;
             }
         }
@@ -298,14 +301,14 @@ namespace Penguin.WinForms.Components
         [DefaultValue(false)]
         public virtual bool AllowItemDrag
         {
-            get => this._allowItemDrag;
+            get => _allowItemDrag;
             set
             {
-                if (this.AllowItemDrag != value)
+                if (AllowItemDrag != value)
                 {
-                    this._allowItemDrag = value;
+                    _allowItemDrag = value;
 
-                    this.OnAllowItemDragChanged(EventArgs.Empty);
+                    OnAllowItemDragChanged(EventArgs.Empty);
                 }
             }
         }
@@ -318,14 +321,14 @@ namespace Penguin.WinForms.Components
         [DefaultValue(typeof(Color), "Red")]
         public virtual Color InsertionLineColor
         {
-            get => this._insertionLineColor;
+            get => _insertionLineColor;
             set
             {
-                if (this.InsertionLineColor != value)
+                if (InsertionLineColor != value)
                 {
-                    this._insertionLineColor = value;
+                    _insertionLineColor = value;
 
-                    this.OnInsertionLineColorChanged(EventArgs.Empty);
+                    OnInsertionLineColorChanged(EventArgs.Empty);
                 }
             }
         }
@@ -358,17 +361,17 @@ namespace Penguin.WinForms.Components
             {
                 Rectangle bounds;
 
-                bounds = this.GetItemRectangle(index);
-                if (this.InsertionMode == InsertionMode.Before && index > 0)
+                bounds = GetItemRectangle(index);
+                if (InsertionMode == InsertionMode.Before && index > 0)
                 {
-                    bounds = Rectangle.Union(bounds, this.GetItemRectangle(index - 1));
+                    bounds = Rectangle.Union(bounds, GetItemRectangle(index - 1));
                 }
-                else if (this.InsertionMode == InsertionMode.After && index < this.Items.Count - 1)
+                else if (InsertionMode == InsertionMode.After && index < Items.Count - 1)
                 {
-                    bounds = Rectangle.Union(bounds, this.GetItemRectangle(index + 1));
+                    bounds = Rectangle.Union(bounds, GetItemRectangle(index + 1));
                 }
 
-                this.Invalidate(bounds);
+                Invalidate(bounds);
             }
         }
 
@@ -380,7 +383,7 @@ namespace Penguin.WinForms.Components
         {
             EventHandler handler;
 
-            handler = this.AllowItemDragChanged;
+            handler = AllowItemDragChanged;
 
             handler?.Invoke(this, e);
         }
@@ -393,7 +396,7 @@ namespace Penguin.WinForms.Components
         {
             EventHandler handler;
 
-            handler = this.InsertionLineColorChanged;
+            handler = InsertionLineColorChanged;
 
             handler?.Invoke(this, e);
         }
@@ -406,7 +409,7 @@ namespace Penguin.WinForms.Components
         {
             EventHandler<ListBoxExItemDragEventArgs> handler;
 
-            handler = this.ItemDrag;
+            handler = ItemDrag;
 
             handler?.Invoke(this, e);
         }
@@ -419,12 +422,15 @@ namespace Penguin.WinForms.Components
         {
             EventHandler<CancelListBoxExItemDragEventArgs> handler;
 
-            handler = this.ItemDragging;
+            handler = ItemDragging;
 
             handler?.Invoke(this, e);
         }
 
-        protected virtual void OnWmPaint(ref Message m) => this.DrawInsertionLine();
+        protected virtual void OnWmPaint(ref Message m)
+        {
+            DrawInsertionLine();
+        }
 
         #endregion Protected Members
 
@@ -432,58 +438,56 @@ namespace Penguin.WinForms.Components
 
         private void DrawInsertionLine()
         {
-            if (this.InsertionIndex != INVALID_INDEX)
+            if (InsertionIndex != INVALID_INDEX)
             {
                 int index;
 
-                index = this.InsertionIndex;
+                index = InsertionIndex;
 
-                if (index >= 0 && index < this.Items.Count)
+                if (index >= 0 && index < Items.Count)
                 {
                     Rectangle bounds;
                     int x;
                     int y;
                     int width;
 
-                    bounds = this.GetItemRectangle(this.InsertionIndex);
+                    bounds = GetItemRectangle(InsertionIndex);
                     x = 0; // always fit the line to the client area, regardless of how the user is scrolling
-                    y = this.InsertionMode == InsertionMode.Before ? bounds.Top : bounds.Bottom;
-                    width = Math.Min(bounds.Width - bounds.Left, this.ClientSize.Width); // again, make sure the full width fits in the client area
+                    y = InsertionMode == InsertionMode.Before ? bounds.Top : bounds.Bottom;
+                    width = Math.Min(bounds.Width - bounds.Left, ClientSize.Width); // again, make sure the full width fits in the client area
 
-                    this.DrawInsertionLine(x, y, width);
+                    DrawInsertionLine(x, y, width);
                 }
             }
         }
 
         private void DrawInsertionLine(int x1, int y, int width)
         {
-            using (Graphics g = this.CreateGraphics())
-            {
-                Point[] leftArrowHead;
-                Point[] rightArrowHead;
-                int arrowHeadSize;
-                int x2;
+            using Graphics g = CreateGraphics();
+            Point[] leftArrowHead;
+            Point[] rightArrowHead;
+            int arrowHeadSize;
+            int x2;
 
-                x2 = x1 + width;
-                arrowHeadSize = 7;
-                leftArrowHead = new[]
-                                {
+            x2 = x1 + width;
+            arrowHeadSize = 7;
+            leftArrowHead = new[]
+                            {
                           new Point(x1, y - (arrowHeadSize / 2)), new Point(x1 + arrowHeadSize, y), new Point(x1, y + (arrowHeadSize / 2))
                         };
-                rightArrowHead = new[]
-                                 {
+            rightArrowHead = new[]
+                             {
                            new Point(x2, y - (arrowHeadSize / 2)), new Point(x2 - arrowHeadSize, y), new Point(x2, y + (arrowHeadSize / 2))
                          };
 
-                using (Pen pen = new Pen(this.InsertionLineColor))
-                {
-                    g.DrawLine(pen, x1, y, x2 - 1, y);
-                }
-
-                using Brush brush = new SolidBrush(this.InsertionLineColor);
-                g.FillPolygon(brush, leftArrowHead);
-                g.FillPolygon(brush, rightArrowHead);
+            using (Pen pen = new(InsertionLineColor))
+            {
+                g.DrawLine(pen, x1, y, x2 - 1, y);
             }
+
+            using Brush brush = new SolidBrush(InsertionLineColor);
+            g.FillPolygon(brush, leftArrowHead);
+            g.FillPolygon(brush, rightArrowHead);
         }
 
         private bool IsOutsideDragZone(Point location)
@@ -494,7 +498,7 @@ namespace Penguin.WinForms.Components
 
             dragWidth = SystemInformation.DragSize.Width;
             dragHeight = SystemInformation.DragSize.Height;
-            dragZone = new Rectangle(this.DragOrigin.X - (dragWidth / 2), this.DragOrigin.Y - (dragHeight / 2), dragWidth, dragHeight);
+            dragZone = new Rectangle(DragOrigin.X - (dragWidth / 2), DragOrigin.Y - (dragHeight / 2), dragWidth, dragHeight);
 
             return !dragZone.Contains(location);
         }

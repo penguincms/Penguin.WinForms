@@ -10,7 +10,10 @@ namespace Penguin.WinForms.Components.Dependencies
         /// Initializes a new instance of the <see cref="CancelListBoxItemDragEventArgs"/> class.
         /// </summary>
         /// <param name="dragIndex">The index of the item the event data relates to.</param>
-        public CancelListBoxExItemDragEventArgs(int dragIndex) => this.DragIndex = dragIndex;
+        public CancelListBoxExItemDragEventArgs(int dragIndex)
+        {
+            DragIndex = dragIndex;
+        }
 
         #endregion Public Constructors
 

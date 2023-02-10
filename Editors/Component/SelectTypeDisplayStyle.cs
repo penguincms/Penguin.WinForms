@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Penguin.WinForms.Editors.Component
+﻿namespace Penguin.WinForms.Editors.Component
 {
     public enum SelectTypeDisplayStyle
     {

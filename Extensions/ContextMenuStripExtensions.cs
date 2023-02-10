@@ -5,9 +5,15 @@ namespace Penguin.WinForms.Extensions
 {
     public static class ContextMenuStripExtensions
     {
-        public static ToolStripMenuItem AddItem(this ContextMenuStrip menu, string DisplayText, Action toExecute) => menu.AddItem(DisplayText, (e) => toExecute.Invoke());
+        public static ToolStripMenuItem AddItem(this ContextMenuStrip menu, string DisplayText, Action toExecute)
+        {
+            return menu.AddItem(DisplayText, (e) => toExecute.Invoke());
+        }
 
-        public static ToolStripMenuItem AddItem(this ContextMenuStrip menu, string DisplayText, Action<EventArgs> toExecute) => menu.AddItem(DisplayText, (sender, e) => toExecute.Invoke(e));
+        public static ToolStripMenuItem AddItem(this ContextMenuStrip menu, string DisplayText, Action<EventArgs> toExecute)
+        {
+            return menu.AddItem(DisplayText, (sender, e) => toExecute.Invoke(e));
+        }
 
         public static ToolStripMenuItem AddItem(this ContextMenuStrip menu, string DisplayText, Action<object, EventArgs> toExecute)
         {
@@ -26,9 +32,9 @@ namespace Penguin.WinForms.Extensions
                 throw new ArgumentNullException(nameof(toExecute));
             }
 
-            ToolStripMenuItem newItem = new ToolStripMenuItem { Text = DisplayText };
-            newItem.Click += (o, e) => toExecute.Invoke(o, e);
-            menu.Items.Add(newItem);
+            ToolStripMenuItem newItem = new() { Text = DisplayText };
+            newItem.Click += toExecute.Invoke;
+            _ = menu.Items.Add(newItem);
             return newItem;
         }
     }

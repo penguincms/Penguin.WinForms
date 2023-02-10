@@ -13,88 +13,88 @@ namespace Penguin.WinForms.Editors.Component
 
         public InputText(string Title = "Please Select An Option", string defaultText = "", Action<string> onSelect = null)
         {
-            this.Text = Title;
+            Text = Title;
 
-            this.TextBox = new TextBox()
+            TextBox = new TextBox()
             {
                 Text = defaultText
             };
 
-            this.Controls.Add(this.TextBox);
+            Controls.Add(TextBox);
 
-            this.SelectButton = new Button()
+            SelectButton = new Button()
             {
                 Text = "OK"
             };
 
-            this.CancelSelectionButton = new Button()
+            CancelSelectionButton = new Button()
             {
                 Text = "Cancel"
             };
 
-            this.SelectButton.Click += (sender, e) =>
+            SelectButton.Click += (sender, e) =>
             {
-                this.DialogResult = DialogResult.OK;
-                this.Result = this.TextBox.Text;
-                onSelect?.Invoke(this.Result);
-                this.Close();
+                DialogResult = DialogResult.OK;
+                Result = TextBox.Text;
+                onSelect?.Invoke(Result);
+                Close();
             };
 
-            this.CancelSelectionButton.Click += (sender, e) =>
+            CancelSelectionButton.Click += (sender, e) =>
             {
-                this.DialogResult = DialogResult.Cancel;
-                this.Close();
+                DialogResult = DialogResult.Cancel;
+                Close();
             };
 
-            this.Controls.Add(this.SelectButton);
-            this.Controls.Add(this.CancelSelectionButton);
+            Controls.Add(SelectButton);
+            Controls.Add(CancelSelectionButton);
 
-            this.ResizeObjects();
+            ResizeObjects();
         }
 
         public static DialogResult ShowDialog(string Title = "Please Select An Option", string defaultText = "", Action<string> onSelect = null)
         {
-            InputText textdialog = new InputText(Title, defaultText, onSelect);
+            InputText textdialog = new(Title, defaultText, onSelect);
 
             return (textdialog as Form).ShowDialog();
         }
 
         protected override void OnResize(EventArgs e)
         {
-            this.ResizeObjects();
+            ResizeObjects();
             base.OnResize(e);
         }
 
         protected virtual void ResizeObjects()
         {
-            this.TextBox.Width = this.ClientSize.Width;
-            this.CancelSelectionButton.Width = this.SelectButton.Width = this.ClientSize.Width / 2;
+            TextBox.Width = ClientSize.Width;
+            CancelSelectionButton.Width = SelectButton.Width = ClientSize.Width / 2;
 
-            this.TextBox.Height = this.ClientSize.Height / 2;
-            this.CancelSelectionButton.Height = this.SelectButton.Height = this.TextBox.Height;
+            TextBox.Height = ClientSize.Height / 2;
+            CancelSelectionButton.Height = SelectButton.Height = TextBox.Height;
 
-            this.TextBox.Top = 0;
-            this.CancelSelectionButton.Top = this.SelectButton.Top = this.TextBox.Height;
+            TextBox.Top = 0;
+            CancelSelectionButton.Top = SelectButton.Top = TextBox.Height;
 
-            this.SelectButton.Left = this.ClientSize.Width / 2;
-            this.CancelSelectionButton.Left = 0;
+            SelectButton.Left = ClientSize.Width / 2;
+            CancelSelectionButton.Left = 0;
 
-            this.ClientSize = new Size()
+            ClientSize = new Size()
             {
-                Height = this.TextBox.Height + this.CancelSelectionButton.Height,
-                Width = this.ClientSize.Width
+                Height = TextBox.Height + CancelSelectionButton.Height,
+                Width = ClientSize.Width
             };
         }
 
         public void InitializeComponent()
         {
-            this.SuspendLayout();
+            SuspendLayout();
             //
             // SelectForm
             //
-            this.ClientSize = new System.Drawing.Size(320, 77);
-            this.Name = "SelectForm";
-            this.ResumeLayout(false);
+            ClientSize = new System.Drawing.Size(320, 77);
+            Name = "SelectForm";
+            ResumeLayout(false);
         }
     }
 }

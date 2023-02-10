@@ -6,7 +6,7 @@ namespace Penguin.WinForms.Editors.ConstructorArguments
 {
     public class LabelConstructorArguments : ILabelConstructorArguments
     {
-        public int LeftOffset { get; set; } = 0;
+        public int LeftOffset { get; set; }
 
         public string Name { get; set; }
 
@@ -16,6 +16,9 @@ namespace Penguin.WinForms.Editors.ConstructorArguments
 
         public string ToolTip { get; set; }
 
-        public LabelConstructorArguments(string labelText) => this.Name = labelText;
+        public LabelConstructorArguments(string labelText)
+        {
+            Name = labelText;
+        }
     }
 }

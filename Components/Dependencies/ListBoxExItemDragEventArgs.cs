@@ -17,11 +17,11 @@ namespace Penguin.WinForms.Components.Dependencies
         public ListBoxExItemDragEventArgs(int dragIndex, int insertionIndex, InsertionMode insertionMode, int x, int y)
           : this()
         {
-            this.DragIndex = dragIndex;
-            this.X = x;
-            this.Y = y;
-            this.InsertionIndex = insertionIndex;
-            this.InsertionMode = insertionMode;
+            DragIndex = dragIndex;
+            X = x;
+            Y = y;
+            InsertionIndex = insertionIndex;
+            InsertionMode = insertionMode;
         }
 
         #endregion Public Constructors

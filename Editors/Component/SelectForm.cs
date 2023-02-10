@@ -23,7 +23,7 @@ namespace Penguin.WinForms.Editors.Component
 
             displayText ??= new Func<T, string>((t) => t.ToString());
 
-            this.Options = options.ToList();
+            Options = options.ToList();
 
             if (options.Count == 0)
             {
@@ -38,94 +38,94 @@ namespace Penguin.WinForms.Editors.Component
             //    return;
             //}
 
-            this.Text = Title;
+            Text = Title;
 
-            this.SelectBox = new ComboBox()
+            SelectBox = new ComboBox()
             {
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
 
-            this.SelectBox.Items.Add("...");
-            this.SelectBox.SelectedIndex = 0;
+            _ = SelectBox.Items.Add("...");
+            SelectBox.SelectedIndex = 0;
 
             foreach (T o in options)
             {
-                this.SelectBox.Items.Add(displayText.Invoke(o));
+                _ = SelectBox.Items.Add(displayText.Invoke(o));
             }
 
-            this.SelectBox.SelectedIndexChanged += (sender, e) => this.SelectButton.Enabled = this.SelectBox.SelectedIndex != 0;
+            SelectBox.SelectedIndexChanged += (sender, e) => SelectButton.Enabled = SelectBox.SelectedIndex != 0;
 
-            this.Controls.Add(this.SelectBox);
+            Controls.Add(SelectBox);
 
-            this.SelectButton = new Button()
+            SelectButton = new Button()
             {
                 Text = "OK"
             };
 
-            this.CancelSelectionButton = new Button()
+            CancelSelectionButton = new Button()
             {
                 Text = "Cancel"
             };
 
-            this.SelectButton.Click += (sender, e) =>
+            SelectButton.Click += (sender, e) =>
             {
-                if (this.SelectBox.SelectedIndex != 0)
+                if (SelectBox.SelectedIndex != 0)
                 {
-                    this.DialogResult = DialogResult.OK;
-                    this.Result = this.Options.ElementAt(this.SelectBox.SelectedIndex - 1);
-                    onSelect?.Invoke(this.Result);
-                    this.Close();
+                    DialogResult = DialogResult.OK;
+                    Result = Options.ElementAt(SelectBox.SelectedIndex - 1);
+                    onSelect?.Invoke(Result);
+                    Close();
                 }
             };
 
-            this.CancelSelectionButton.Click += (sender, e) =>
+            CancelSelectionButton.Click += (sender, e) =>
             {
-                this.DialogResult = DialogResult.Cancel;
-                this.Close();
+                DialogResult = DialogResult.Cancel;
+                Close();
             };
 
-            this.Controls.Add(this.SelectButton);
-            this.Controls.Add(this.CancelSelectionButton);
+            Controls.Add(SelectButton);
+            Controls.Add(CancelSelectionButton);
 
-            this.ResizeObjects();
+            ResizeObjects();
         }
 
         protected override void OnResize(EventArgs e)
         {
-            this.ResizeObjects();
+            ResizeObjects();
             base.OnResize(e);
         }
 
         protected virtual void ResizeObjects()
         {
-            this.SelectBox.Width = this.ClientSize.Width;
-            this.CancelSelectionButton.Width = this.SelectButton.Width = this.ClientSize.Width / 2;
+            SelectBox.Width = ClientSize.Width;
+            CancelSelectionButton.Width = SelectButton.Width = ClientSize.Width / 2;
 
-            this.SelectBox.Height = this.ClientSize.Height / 2;
-            this.CancelSelectionButton.Height = this.SelectButton.Height = this.SelectBox.Height;
+            SelectBox.Height = ClientSize.Height / 2;
+            CancelSelectionButton.Height = SelectButton.Height = SelectBox.Height;
 
-            this.SelectBox.Top = 0;
-            this.CancelSelectionButton.Top = this.SelectButton.Top = this.SelectBox.Height;
+            SelectBox.Top = 0;
+            CancelSelectionButton.Top = SelectButton.Top = SelectBox.Height;
 
-            this.SelectButton.Left = this.ClientSize.Width / 2;
-            this.CancelSelectionButton.Left = 0;
+            SelectButton.Left = ClientSize.Width / 2;
+            CancelSelectionButton.Left = 0;
 
-            this.ClientSize = new Size()
+            ClientSize = new Size()
             {
-                Height = this.SelectBox.Height + this.CancelSelectionButton.Height,
-                Width = this.ClientSize.Width
+                Height = SelectBox.Height + CancelSelectionButton.Height,
+                Width = ClientSize.Width
             };
         }
 
         public void InitializeComponent()
         {
-            this.SuspendLayout();
+            SuspendLayout();
             //
             // SelectForm
             //
-            this.ClientSize = new System.Drawing.Size(320, 77);
-            this.Name = "SelectForm";
-            this.ResumeLayout(false);
+            ClientSize = new System.Drawing.Size(320, 77);
+            Name = "SelectForm";
+            ResumeLayout(false);
         }
     }
 }

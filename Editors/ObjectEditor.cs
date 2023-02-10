@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Penguin.Json.Extensions;
+﻿using Penguin.Json.Extensions;
 using Penguin.Reflection.Extensions;
 using Penguin.WinForms.Components;
 using Penguin.WinForms.Editors.Component;
@@ -13,7 +12,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -24,26 +22,26 @@ namespace Penguin.WinForms.Editors
     {
         private readonly Panel Container;
         private readonly Action<T> OnSave;
-        private readonly List<Action> ResizeActions = new List<Action>();
-        private readonly Dictionary<Type, string> ToolTipCache = new Dictionary<Type, string>();
+        private readonly List<Action> ResizeActions = new();
+        private readonly Dictionary<Type, string> ToolTipCache = new();
         private int _currentTop;
 
         public int CurrentTop
         {
-            get => this._currentTop;
+            get => _currentTop;
             protected set
             {
-                this.Container.Height = value;
-                this._currentTop = value;
+                Container.Height = value;
+                _currentTop = value;
             }
         }
 
-        public int ITEM_HEIGHT { get; set; } = 35;
-        public int ITEM_SPACING { get; set; } = 3;
-        public int LIST_PADDING { get; set; } = 25;
-        public int PanelPadding => (int)(this.Container.Width * this.WIDTH_PADDING_PER);
+        public int ITEMHEIGHT { get; set; } = 35;
+        public int ITEMSPACING { get; set; } = 3;
+        public int LISTPADDING { get; set; } = 25;
+        public int PanelPadding => (int)(Container.Width * WIDTHPADDINGPER);
         public T TemporaryObject { get; protected set; }
-        public float WIDTH_PADDING_PER { get; set; } = .05f;
+        public float WIDTHPADDINGPER { get; set; } = .05f;
 
         public ObjectEditor(T toEdit, Panel container, Action<T> onSave)
         {
@@ -52,21 +50,21 @@ namespace Penguin.WinForms.Editors
                 throw new ArgumentNullException(nameof(container));
             }
 
-            this.Container = container;
+            Container = container;
 
-            this.Container.Resize += (o, s) =>
+            Container.Resize += (o, s) =>
             {
-                foreach (Action a in this.ResizeActions)
+                foreach (Action a in ResizeActions)
                 {
                     a.Invoke();
                 }
             };
 
-            this.TemporaryObject = toEdit.JsonClone();
+            TemporaryObject = toEdit.JsonClone();
 
-            this.OnSave = onSave;
+            OnSave = onSave;
 
-            this.Load();
+            Load();
         }
 
         public int AddBoolItem(IBoolRowConstructorArguments arguments)
@@ -76,29 +74,29 @@ namespace Penguin.WinForms.Editors
                 throw new ArgumentNullException(nameof(arguments));
             }
 
-            this.AddLabel(arguments);
+            AddLabel(arguments);
 
-            CheckBox value = this.Container.AddControl(new CheckBox
+            CheckBox value = Container.AddControl(new CheckBox
             {
-                Height = this.ITEM_HEIGHT,
-                Top = this.CurrentTop,
+                Height = ITEMHEIGHT,
+                Top = CurrentTop,
                 Name = arguments.Name,
                 Checked = arguments.Value
             });
 
-            Action resize = new Action(() =>
+            Action resize = new(() =>
             {
-                value.Left = (this.Container.Width / 2);
-                value.Width = (this.Container.Width / 2) - this.PanelPadding;
+                value.Left = Container.Width / 2;
+                value.Width = (Container.Width / 2) - PanelPadding;
             });
 
             resize.Invoke();
 
-            this.ResizeActions.Add(resize);
+            ResizeActions.Add(resize);
 
             value.CheckedChanged += (sender, e) =>
             {
-                CheckBox sText = (sender as CheckBox);
+                CheckBox sText = sender as CheckBox;
 
                 arguments.OnChange?.Invoke(new ValueChangedEventArgs()
                 {
@@ -119,27 +117,27 @@ namespace Penguin.WinForms.Editors
 
             if (arguments.ReadOnly)
             {
-                return this.AddTextBoxItem(arguments);
+                return AddTextBoxItem(arguments);
             }
 
-            this.AddLabel(arguments);
+            AddLabel(arguments);
 
-            ComboBox value = this.Container.AddControl(new ComboBox
+            ComboBox value = Container.AddControl(new ComboBox
             {
-                Height = this.ITEM_HEIGHT,
-                Top = this.CurrentTop,
+                Height = ITEMHEIGHT,
+                Top = CurrentTop,
                 Name = arguments.Name,
                 DropDownStyle = ComboBoxStyle.DropDownList
             });
 
-            Action resize = new Action(() =>
+            Action resize = new(() =>
             {
-                value.Left = (this.Container.Width / 2);
-                value.Width = (this.Container.Width / 2) - this.PanelPadding;
+                value.Left = Container.Width / 2;
+                value.Width = (Container.Width / 2) - PanelPadding;
             });
 
             resize.Invoke();
-            this.ResizeActions.Add(resize);
+            ResizeActions.Add(resize);
 
             value.Items.AddRange(arguments.Values.ToArray());
 
@@ -147,7 +145,7 @@ namespace Penguin.WinForms.Editors
 
             value.SelectedIndexChanged += (sender, e) =>
             {
-                ComboBox sText = (sender as ComboBox);
+                ComboBox sText = sender as ComboBox;
 
                 arguments.OnChange?.Invoke(new ValueChangedEventArgs()
                 {
@@ -171,25 +169,25 @@ namespace Penguin.WinForms.Editors
                 return;
             }
 
-            int realLeft = this.PanelPadding + arguments.LeftOffset;
+            int realLeft = PanelPadding + arguments.LeftOffset;
 
-            Label label = this.Container.AddControl(new Label
+            Label label = Container.AddControl(new Label
             {
-                Height = this.ITEM_HEIGHT,
-                Top = this.CurrentTop,
+                Height = ITEMHEIGHT,
+                Top = CurrentTop,
                 Left = realLeft,
                 Text = arguments.Name,
                 TextAlign = System.Drawing.ContentAlignment.MiddleLeft
             });
 
-            Action resize = new Action(() => label.Width = (this.Container.Width / 2) - realLeft);
+            Action resize = new(() => label.Width = (Container.Width / 2) - realLeft);
 
             resize.Invoke();
-            this.ResizeActions.Add(resize);
+            ResizeActions.Add(resize);
 
             if (!string.IsNullOrWhiteSpace(arguments.ToolTip))
             {
-                ToolTip toolTip = new ToolTip()
+                ToolTip toolTip = new()
                 {
                     Tag = label,
                     AutoPopDelay = 32767
@@ -201,24 +199,24 @@ namespace Penguin.WinForms.Editors
 
         public int AddTextBoxItem(ITextBoxRowConstructorArguments arguments)
         {
-            this.AddLabel(arguments);
+            AddLabel(arguments);
 
-            AutoSizeTextBox value = this.Container.AddControl(new AutoSizeTextBox
+            AutoSizeTextBox value = Container.AddControl(new AutoSizeTextBox
             {
-                Height = this.ITEM_HEIGHT * (arguments.Value ?? string.Empty).Count(c => c == '\n'),
-                Top = this.CurrentTop,
+                Height = ITEMHEIGHT * (arguments.Value ?? string.Empty).Count(c => c == '\n'),
+                Top = CurrentTop,
                 Name = arguments.Name,
-                Text = (arguments.Value ?? string.Empty),
+                Text = arguments.Value ?? string.Empty,
                 Multiline = (arguments.Value ?? string.Empty).Contains(System.Environment.NewLine, StringComparison.OrdinalIgnoreCase)
             });
 
-            Action resize = new Action(() =>
+            Action resize = new(() =>
             {
-                value.Left = (this.Container.Width / 2);
-                value.Width = (this.Container.Width / 2) - this.PanelPadding;
+                value.Left = Container.Width / 2;
+                value.Width = (Container.Width / 2) - PanelPadding;
             });
             resize.Invoke();
-            this.ResizeActions.Add(resize);
+            ResizeActions.Add(resize);
 
             if (arguments.ReadOnly)
             {
@@ -234,11 +232,11 @@ namespace Penguin.WinForms.Editors
 
                 value.CallAutoSize();
 
-                if (value.Height > this.ITEM_HEIGHT)
+                if (value.Height > ITEMHEIGHT)
                 {
                     sizeChange += value.ClientSize.Height;
 
-                    foreach (Control c in this.Container.Controls)
+                    foreach (Control c in Container.Controls)
                     {
                         if (c.Top > value.Top)
                         {
@@ -248,7 +246,7 @@ namespace Penguin.WinForms.Editors
                 }
                 else
                 {
-                    value.Height = this.ITEM_HEIGHT;
+                    value.Height = ITEMHEIGHT;
                 }
             }
 
@@ -258,7 +256,7 @@ namespace Penguin.WinForms.Editors
                 {
                     value.Multiline = true;
 
-                    string text = $"{value.Text.Substring(0, value.SelectionStart)}{System.Environment.NewLine}{value.Text.Substring(value.SelectionStart)}";
+                    string text = $"{value.Text[..value.SelectionStart]}{System.Environment.NewLine}{value.Text[value.SelectionStart..]}";
 
                     value.Text = text;
                 }
@@ -266,7 +264,7 @@ namespace Penguin.WinForms.Editors
 
             value.TextChanged += (sender, e) =>
             {
-                AutoSizeTextBox sText = (sender as AutoSizeTextBox);
+                AutoSizeTextBox sText = sender as AutoSizeTextBox;
 
                 arguments.OnChange?.Invoke(new ValueChangedEventArgs()
                 {
@@ -282,11 +280,11 @@ namespace Penguin.WinForms.Editors
 
         public string GetToolTipText(Type objectType)
         {
-            if (!this.ToolTipCache.TryGetValue(objectType, out string toReturn))
+            if (!ToolTipCache.TryGetValue(objectType, out string toReturn))
             {
                 toReturn = string.Empty;
 
-                Queue<Type> typesToCheck = new Queue<Type>();
+                Queue<Type> typesToCheck = new();
 
                 typesToCheck.Enqueue(objectType);
                 bool hasNext;
@@ -314,46 +312,46 @@ namespace Penguin.WinForms.Editors
                     }
                 } while (hasNext);
 
-                this.ToolTipCache.Add(objectType, toReturn);
+                ToolTipCache.Add(objectType, toReturn);
             }
             return toReturn;
         }
 
         public void Load()
         {
-            this.Container.SuspendDrawing();
+            Container.SuspendDrawing();
 
-            this.Container.Controls.Clear();
+            Container.Controls.Clear();
 
-            this.CurrentTop = 0;
+            CurrentTop = 0;
 
-            Button saveButton = this.Container.AddControl(new Button
+            Button saveButton = Container.AddControl(new Button
             {
                 Text = "Save",
-                Top = this.CurrentTop,
-                Left = this.PanelPadding,
+                Top = CurrentTop,
+                Left = PanelPadding,
                 Height = 35,
                 Width = 85
             });
 
             //FixMe
             saveButton.Parent.Top = 0;
-            saveButton.Click += (sender, e) => this.OnSave.Invoke(this.Retrieve());
+            saveButton.Click += (sender, e) => OnSave.Invoke(Retrieve());
 
-            this.CurrentTop += saveButton.Height + this.ITEM_SPACING;
+            CurrentTop += saveButton.Height + ITEMSPACING;
 
-            this.AddLabel(new LabelConstructorArguments(this.TemporaryObject.GetType().Name));
+            AddLabel(new LabelConstructorArguments(TemporaryObject.GetType().Name));
 
-            this.CurrentTop += this.ITEM_HEIGHT;
+            CurrentTop += ITEMHEIGHT;
 
-            this.RenderProperties(this.TemporaryObject, this.TemporaryObject.GetType(), 0);
+            RenderProperties(TemporaryObject, TemporaryObject.GetType(), 0);
 
-            this.Container.ResumeDrawing();
+            Container.ResumeDrawing();
         }
 
         public object Render(object value, Type objectType, string Name, int left, Action<ValueChangedEventArgs> onChange, bool readOnly = false)
         {
-            if (!(value is null))
+            if (value is not null)
             {
                 objectType = value.GetType();
             }
@@ -376,11 +374,11 @@ namespace Penguin.WinForms.Editors
                 throw new Exception("Something went terribly wrong");
             }
 
-            string toolTipText = this.GetToolTipText(objectType);
+            string toolTipText = GetToolTipText(objectType);
 
             if (objectType == typeof(bool))
             {
-                BoolRowConstructorArguments boolConstructorArguments = new BoolRowConstructorArguments()
+                BoolRowConstructorArguments boolConstructorArguments = new()
                 {
                     Name = Name,
                     Value = (bool)value,
@@ -390,20 +388,20 @@ namespace Penguin.WinForms.Editors
                     ToolTip = toolTipText
                 };
 
-                this.AddBoolItem(boolConstructorArguments);
+                _ = AddBoolItem(boolConstructorArguments);
 
-                this.CurrentTop += this.ITEM_HEIGHT + this.ITEM_SPACING;
+                CurrentTop += ITEMHEIGHT + ITEMSPACING;
             }
             else if (objectType.IsEnum)
             {
-                List<string> values = new List<string>();
+                List<string> values = new();
 
                 foreach (object EnumVal in Enum.GetValues(objectType))
                 {
                     values.Add(EnumVal.ToString());
                 }
 
-                DropDownRowConstructorArguments arguments = new DropDownRowConstructorArguments()
+                DropDownRowConstructorArguments arguments = new()
                 {
                     LeftOffset = left,
                     Name = Name,
@@ -414,31 +412,31 @@ namespace Penguin.WinForms.Editors
                     ReadOnly = readOnly
                 };
 
-                this.AddDropDownItem(arguments);
-                this.CurrentTop += this.ITEM_HEIGHT + this.ITEM_SPACING;
+                _ = AddDropDownItem(arguments);
+                CurrentTop += ITEMHEIGHT + ITEMSPACING;
             }
             else if (isCollection)
             {
                 Type collectionType = objectType.GetCollectionType();
 
-                this.AddLabel(new LabelConstructorArguments(Name)
+                AddLabel(new LabelConstructorArguments(Name)
                 {
                     LeftOffset = left,
                     ToolTip = toolTipText
                 });
 
-                Button addButton = this.Container.AddControl(new Button
+                Button addButton = Container.AddControl(new Button
                 {
                     Text = "Add",
-                    Top = this.CurrentTop,
+                    Top = CurrentTop,
                     Height = 35,
                     Width = 85
                 });
 
-                Action resize = new Action(() => addButton.Left = (this.Container.Width / 2));
+                Action resize = new(() => addButton.Left = Container.Width / 2);
 
                 resize.Invoke();
-                this.ResizeActions.Add(resize);
+                ResizeActions.Add(resize);
 
                 addButton.Click += (sender, e) =>
                 {
@@ -456,7 +454,7 @@ namespace Penguin.WinForms.Editors
                     {
                         if (SelectTypeForm.GetOptions(collectionType).Count > 1)
                         {
-                            SelectTypeForm selectForm = new SelectTypeForm(collectionType);
+                            SelectTypeForm selectForm = new(collectionType);
 
                             if (selectForm.ShowDialog() == DialogResult.OK)
                             {
@@ -471,20 +469,17 @@ namespace Penguin.WinForms.Editors
 
                     if (toAdd != null)
                     {
-                        (value as IList).Add(toAdd);
-                        this.Load();
+                        _ = (value as IList).Add(toAdd);
+                        Load();
                     }
                 };
 
                 if (!string.IsNullOrWhiteSpace(Name))
                 {
-                    this.CurrentTop += this.ITEM_HEIGHT + this.ITEM_SPACING;
+                    CurrentTop += ITEMHEIGHT + ITEMSPACING;
                 }
 
-                if (value is null)
-                {
-                    value = Activator.CreateInstance(objectType);
-                }
+                value ??= Activator.CreateInstance(objectType);
 
                 IList vList = value as IList;
                 int index = 0;
@@ -493,38 +488,38 @@ namespace Penguin.WinForms.Editors
                 {
                     int thisIndex = index;
 
-                    Button removeButton = this.Container.AddControl(new Button
+                    Button removeButton = Container.AddControl(new Button
                     {
                         Text = "-",
-                        Left = left + this.PanelPadding,
-                        Top = this.CurrentTop,
-                        Width = this.LIST_PADDING,
-                        Height = this.ITEM_HEIGHT
+                        Left = left + PanelPadding,
+                        Top = CurrentTop,
+                        Width = LISTPADDING,
+                        Height = ITEMHEIGHT
                     });
 
                     removeButton.Click += (sender, e) =>
                     {
                         vList.RemoveAt(thisIndex);
-                        this.Load();
+                        Load();
                     };
 
                     Action<ValueChangedEventArgs> entryChanged = (t) =>
                     {
-                        if (this.TryCast(t, collectionType, out object result))
+                        if (TryCast(t, collectionType, out object result))
                         {
                             vList.RemoveAt(thisIndex);
                             vList.Insert(thisIndex, result);
                         }
                     };
 
-                    this.Render(o, collectionType, string.Empty, left + this.LIST_PADDING, entryChanged, readOnly);
+                    _ = Render(o, collectionType, string.Empty, left + LISTPADDING, entryChanged, readOnly);
 
                     index++;
                 }
             }
             else if (isValue)
             {
-                TextBoxRowConstructorArguments arguments = new TextBoxRowConstructorArguments()
+                TextBoxRowConstructorArguments arguments = new()
                 {
                     Name = Name,
                     Value = value?.ToString(),
@@ -534,15 +529,15 @@ namespace Penguin.WinForms.Editors
                     ToolTip = toolTipText
                 };
 
-                int vHeight = this.AddTextBoxItem(arguments);
-                this.CurrentTop += vHeight + this.ITEM_SPACING;
+                int vHeight = AddTextBoxItem(arguments);
+                CurrentTop += vHeight + ITEMSPACING;
             }
             else
             {
                 if (!string.IsNullOrWhiteSpace(Name))
                 {
-                    this.AddLabel(new LabelConstructorArguments(Name) { LeftOffset = left, ToolTip = toolTipText });
-                    this.CurrentTop += this.ITEM_HEIGHT + this.ITEM_SPACING;
+                    AddLabel(new LabelConstructorArguments(Name) { LeftOffset = left, ToolTip = toolTipText });
+                    CurrentTop += ITEMHEIGHT + ITEMSPACING;
                 }
 
                 if (value is null)
@@ -553,9 +548,9 @@ namespace Penguin.WinForms.Editors
                     }
                 }
 
-                if (!(value is null))
+                if (value is not null)
                 {
-                    this.RenderProperties(value, objectType, left + this.LIST_PADDING);
+                    RenderProperties(value, objectType, left + LISTPADDING);
                 }
             }
 
@@ -584,7 +579,7 @@ namespace Penguin.WinForms.Editors
                 {
                     onPropertyChange = (t) =>
                     {
-                        if (this.TryCast(t, pi.PropertyType, out object result))
+                        if (TryCast(t, pi.PropertyType, out object result))
                         {
                             pi.SetValue(item, t.Value.Convert(pi.PropertyType));
                         }
@@ -593,9 +588,9 @@ namespace Penguin.WinForms.Editors
 
                 void RenderException(Exception ex)
                 {
-                    RenderExceptionWrapper renderException = new RenderExceptionWrapper(ex);
+                    RenderExceptionWrapper renderException = new(ex);
 
-                    this.Render(renderException, typeof(RenderExceptionWrapper), pi.Name, left, (v) => { }, true);
+                    _ = Render(renderException, typeof(RenderExceptionWrapper), pi.Name, left, (v) => { }, true);
                 }
 
                 try
@@ -609,7 +604,7 @@ namespace Penguin.WinForms.Editors
                     }
                     else
                     {
-                        object renderableObject = this.Render(pi.GetValue(item), pi.PropertyType, pi.Name, left, onPropertyChange, readOnly);
+                        object renderableObject = Render(pi.GetValue(item), pi.PropertyType, pi.Name, left, onPropertyChange, readOnly);
 
                         if (!readOnly)
                         {
@@ -624,7 +619,10 @@ namespace Penguin.WinForms.Editors
             }
         }
 
-        public T Retrieve() => this.TemporaryObject.JsonClone();
+        public T Retrieve()
+        {
+            return TemporaryObject.JsonClone();
+        }
 
         public bool TryCast(ValueChangedEventArgs valueChangeEventArgs, Type type, out object result)
         {
@@ -654,21 +652,24 @@ namespace Penguin.WinForms.Editors
 
         #region IDisposable Support
 
-        private bool disposedValue = false; // To detect redundant calls
+        private bool disposedValue; // To detect redundant calls
 
         // This code added to correctly implement the disposable pattern.
-        public void Dispose() =>
+        public void Dispose()
+        {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            this.Dispose(true);// TODO: uncomment the following line if the finalizer is overridden above.// GC.SuppressFinalize(this);
+            Dispose(true);// TODO: uncomment the following line if the finalizer is overridden above.// GC.SuppressFinalize(this);
+        }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposedValue)
+            if (!disposedValue)
             {
                 try
                 {
                     //this.Container.Dispose();
-                } catch(Exception ex) 
+                }
+                catch (Exception ex)
                 {
                     // Split Container Dispose Error
                     // ref https://stackoverflow.com/questions/19055526/splitcontainer-error
@@ -677,7 +678,7 @@ namespace Penguin.WinForms.Editors
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
-                this.disposedValue = true;
+                disposedValue = true;
             }
         }
 
@@ -685,7 +686,7 @@ namespace Penguin.WinForms.Editors
         ~ObjectEditor()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            this.Dispose(false);
+            Dispose(false);
         }
 
         #endregion IDisposable Support

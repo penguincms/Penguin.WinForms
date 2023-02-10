@@ -13,11 +13,11 @@ namespace Penguin.WinForms.Dialogs
 
         public ExceptionDialog(string Message, string Title = DEFAULT_TITLE)
         {
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.Text = Title;
-            this.MinimizeBox = false;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Text = Title;
+            MinimizeBox = false;
 
-            TextBox errorMessage = new TextBox
+            TextBox errorMessage = new()
             {
                 Dock = DockStyle.Fill,
                 ReadOnly = true,
@@ -27,19 +27,19 @@ namespace Penguin.WinForms.Dialogs
                 Text = Message
             };
 
-            this.Controls.Add(errorMessage);
+            Controls.Add(errorMessage);
         }
 
         public static ExceptionDialog Show(Exception ex, string Title = DEFAULT_TITLE)
         {
-            ExceptionDialog dialog = new ExceptionDialog(ex, Title);
+            ExceptionDialog dialog = new(ex, Title);
             dialog.Show();
             return dialog;
         }
 
         public static ExceptionDialog Show(string Message, string Title = DEFAULT_TITLE)
         {
-            ExceptionDialog dialog = new ExceptionDialog(Message, Title);
+            ExceptionDialog dialog = new(Message, Title);
             dialog.Show();
             return dialog;
         }
