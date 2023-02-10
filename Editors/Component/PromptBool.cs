@@ -10,6 +10,7 @@ namespace Penguin.WinForms.Editors.Component
         protected Button CancelSelectionButton;
         protected Button SelectButton;
         protected TextBox TextBox;
+
         public bool Result { get; protected set; }
 
         public PromptBool(string text, string trueText = "Yes", string falseText = "No", string Title = "Please Select An Option", Action<bool> onSelect = null)

@@ -37,10 +37,15 @@ namespace Penguin.WinForms.Editors
         }
 
         public int ITEMHEIGHT { get; set; } = 35;
+
         public int ITEMSPACING { get; set; } = 3;
+
         public int LISTPADDING { get; set; } = 25;
+
         public int PanelPadding => (int)(Container.Width * WIDTHPADDINGPER);
+
         public T TemporaryObject { get; protected set; }
+
         public float WIDTHPADDINGPER { get; set; } = .05f;
 
         public ObjectEditor(T toEdit, Panel container, Action<T> onSave)

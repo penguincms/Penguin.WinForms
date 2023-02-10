@@ -9,6 +9,7 @@ namespace Penguin.WinForms.Editors.Component
         protected Button CancelSelectionButton;
         protected Button SelectButton;
         protected TextBox TextBox;
+
         public string Result { get; protected set; }
 
         public InputText(string Title = "Please Select An Option", string defaultText = "", Action<string> onSelect = null)

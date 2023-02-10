@@ -11,7 +11,9 @@ namespace Penguin.WinForms.Editors.Component
         protected Button CancelSelectionButton;
         protected ComboBox SelectBox;
         protected Button SelectButton;
+
         public IReadOnlyList<T> Options { get; set; }
+
         public T Result { get; protected set; }
 
         public SelectForm(IList<T> options, string Title = "Please Select An Option", Action<T> onSelect = null, Func<T, string> displayText = null)
