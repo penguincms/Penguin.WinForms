@@ -5,7 +5,7 @@ namespace Penguin.WinForms.Components // May need to set to something else
 {
     /// <summary>
     /// A ListView with DragDrop reordering.
-    /// <see cref="http://support.microsoft.com/kb/822483/en-us"/>
+    /// http://support.microsoft.com/kb/822483/en-us
     /// </summary>
     public class ListViewEx : ListView
     {

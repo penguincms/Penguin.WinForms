@@ -19,7 +19,7 @@ namespace Penguin.WinForms.Components
         // Make the TextBox fit its contents.
         public void CallAutoSize()
         {
-            if (this.Text.Contains("\n"))
+            if (this.Text.Contains('\n'))
             {
                 this.Multiline = true;
             }
