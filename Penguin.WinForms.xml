@@ -6,13 +6,13 @@
     <members>
         <member name="M:Penguin.WinForms.Components.Dependencies.CancelListBoxExItemDragEventArgs.#ctor(System.Int32)">
             <summary>
-            Initializes a new instance of the <see cref="!:CancelListBoxItemDragEventArgs" /> class.
+            Initializes a new instance of the <see cref="!:CancelListBoxItemDragEventArgs"/> class.
             </summary>
             <param name="dragIndex">The index of the item the event data relates to.</param>
         </member>
         <member name="M:Penguin.WinForms.Components.Dependencies.CancelListBoxExItemDragEventArgs.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="!:CancelListBoxItemDragEventArgs" /> class.
+            Initializes a new instance of the <see cref="!:CancelListBoxItemDragEventArgs"/> class.
             </summary>
         </member>
         <member name="P:Penguin.WinForms.Components.Dependencies.CancelListBoxExItemDragEventArgs.DragIndex">
@@ -23,17 +23,17 @@
         </member>
         <member name="M:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.#ctor(System.Int32,System.Int32,Penguin.WinForms.Components.Enumerations.InsertionMode,System.Int32,System.Int32)">
             <summary>
-            Initializes a new instance of the <see cref="!:ListBoxItemDragEventArgs" /> class.
+            Initializes a new instance of the <see cref="!:ListBoxItemDragEventArgs"/> class.
             </summary>
             <param name="dragIndex">The index of the item that initiated the drag operation.</param>
-            <param name="insertionIndex">The index of the the <see cref="!:ListBoxItem" /> that is the target of the drag operation.</param>
-            <param name="insertionMode">The relation of the <see cref="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex" />.</param>
+            <param name="insertionIndex">The index of the the <see cref="!:ListBoxItem"/> that is the target of the drag operation.</param>
+            <param name="insertionMode">The relation of the <see cref="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex"/>.</param>
             <param name="x">The x-coordinate of a mouse click, in pixels.</param>
             <param name="y">The y-coordinate of a mouse click, in pixels.</param>
         </member>
         <member name="M:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="!:ListBoxItemDragEventArgs" /> class.
+            Initializes a new instance of the <see cref="!:ListBoxItemDragEventArgs"/> class.
             </summary>
         </member>
         <member name="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex">
@@ -44,9 +44,9 @@
         </member>
         <member name="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionMode">
             <summary>
-            Gets the relation of the <see cref="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex" />
+            Gets the relation of the <see cref="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex"/>
             </summary>
-            <value>The relation of the <see cref="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex" />.</value>
+            <value>The relation of the <see cref="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.InsertionIndex"/>.</value>
         </member>
         <member name="P:Penguin.WinForms.Components.Dependencies.ListBoxExItemDragEventArgs.X">
             <summary>
@@ -102,21 +102,21 @@
         </member>
         <member name="M:Penguin.WinForms.Components.ListBoxEx.OnDragDrop(System.Windows.Forms.DragEventArgs)">
             <summary>
-            Raises the <see cref="E:System.Windows.Forms.Control.DragDrop" /> event.
+            Raises the <see cref="E:System.Windows.Forms.Control.DragDrop"/> event.
             </summary>
-            <param name="drgevent">A <see cref="T:System.Windows.Forms.DragEventArgs" /> that contains the event data. </param>
+            <param name="drgevent">A <see cref="T:System.Windows.Forms.DragEventArgs"/> that contains the event data. </param>
         </member>
         <member name="M:Penguin.WinForms.Components.ListBoxEx.OnMouseDown(System.Windows.Forms.MouseEventArgs)">
             <summary>
-            Raises the <see cref="E:System.Windows.Forms.Control.MouseDown" /> event.
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseDown"/> event.
             </summary>
-            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs" /> that contains the event data. </param>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data. </param>
         </member>
         <member name="M:Penguin.WinForms.Components.ListBoxEx.OnMouseMove(System.Windows.Forms.MouseEventArgs)">
             <summary>
-            Raises the <see cref="E:System.Windows.Forms.Control.MouseMove" /> event.
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseMove"/> event.
             </summary>
-            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs" /> that contains the event data. </param>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data. </param>
         </member>
         <member name="M:Penguin.WinForms.Components.ListBoxEx.WndProc(System.Windows.Forms.Message@)">
             <summary>
@@ -132,7 +132,7 @@
         </member>
         <member name="M:Penguin.WinForms.Components.ListBoxEx.Invalidate(System.Int32)">
             <summary>
-            Invalidates the specified item, including the adjacent item depending on the current <see cref="P:Penguin.WinForms.Components.ListBoxEx.InsertionMode" />.
+            Invalidates the specified item, including the adjacent item depending on the current <see cref="P:Penguin.WinForms.Components.ListBoxEx.InsertionMode"/>.
             </summary>
             <param name="index">The index of the item to invalidate.</param>
         </member>
