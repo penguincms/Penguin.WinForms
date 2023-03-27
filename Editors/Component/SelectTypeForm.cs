@@ -26,11 +26,11 @@ namespace Penguin.WinForms.Editors.Component
 
             if (baseType.IsInterface)
             {
-                TypeOptions.AddRange(TypeFactory.GetAllImplementations(baseType));
+                TypeOptions.AddRange(TypeFactory.Default.GetAllImplementations(baseType));
             }
             else
             {
-                TypeOptions.AddRange(TypeFactory.GetDerivedTypes(baseType));
+                TypeOptions.AddRange(TypeFactory.Default.GetDerivedTypes(baseType));
             }
 
             return TypeOptions.Distinct().ToList();
